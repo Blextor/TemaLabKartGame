@@ -26,12 +26,10 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "1.5.7",
+      "version": "1.11.2",
       "depth": 0,
       "source": "registry",
-      "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.0"
-      },
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.connect.share": {
@@ -77,7 +75,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.3",
+      "version": "1.2.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -101,7 +99,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ml-agents": {
-      "version": "1.0.7",
+      "version": "1.0.8",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -112,13 +110,6 @@
         "com.unity.modules.physics2d": "1.0.0",
         "com.unity.modules.unityanalytics": "1.0.0"
       },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.nuget.newtonsoft-json": {
-      "version": "2.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.postprocessing": {
@@ -147,7 +138,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.26",
+      "version": "1.1.29",
       "depth": 0,
       "source": "registry",
       "dependencies": {
