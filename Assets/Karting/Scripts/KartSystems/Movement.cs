@@ -176,7 +176,7 @@ namespace KartGame.KartSystems
         {
 
             foreach (var trail in m_DriftTrailInstances)
-                trail.Item3.emitting = active && trail.wheel.GetGroundHit(out WheelHit hit);
+                trail.trail.emitting = active && trail.wheel.GetGroundHit(out WheelHit hit);
         }
 
         private void UpdateDriftVFXOrientation()
