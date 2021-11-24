@@ -105,8 +105,8 @@ MonoBehaviour:
   DriftTrailPrefab: {fileID: 4162818498552360563, guid: b2760c993f819b44e840bfe1a2611ccc,
     type: 3}
   DriftTrailVerticalOffset: 0
-  SuspensionHeight: 0.2
-  SuspensionSpring: 20000
+  SuspensionHeight: 0
+  SuspensionSpring: 70000
   SuspensionDamp: 500
   WheelsPositionVerticalOffset: 0
   FrontLeftWheel: {fileID: 6267352898666864276}
