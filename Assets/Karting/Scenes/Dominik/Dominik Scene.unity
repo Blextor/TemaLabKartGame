@@ -1241,6 +1241,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2395634606384856128, guid: fc367b89de7d6b94db7c98a9d7a7c5ba,
+        type: 3}
+      propertyPath: boostStats.modifiers.TopSpeed
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 7586984696163959456, guid: fc367b89de7d6b94db7c98a9d7a7c5ba,
         type: 3}
       propertyPath: m_Name
