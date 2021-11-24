@@ -25,7 +25,7 @@ public class PowerUp_test : PWUP_Script
 
         this.player = player;
 
-        Movement kart = player.GetComponent<Movement>();
+        MovementKart kart = player.GetComponent<MovementKart>();
         Rigidbody rigidbody = player.GetComponent<Rigidbody>();
 
         kart.baseStats.Acceleration *= accelerationBoost;
@@ -55,7 +55,7 @@ public class PowerUp_test : PWUP_Script
     {
         isTimerActive = false;
 
-        Movement kart = player.GetComponent<Movement>();
+        MovementKart kart = player.GetComponent<MovementKart>();
         kart.baseStats.Acceleration /= accelerationBoost;
         kart.baseStats.TopSpeed /= topSpeedBoost;
 

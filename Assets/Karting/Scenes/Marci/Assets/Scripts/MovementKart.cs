@@ -3,18 +3,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.VFX;
 
-namespace KartGame.KartSystems
-{
-    public class Movement : MonoBehaviour
+    public class MovementKart : MonoBehaviour
     {
-        [System.Serializable]
-        public class StatPowerup
-        {
-            public Movement.Stats modifiers;
-            public string PowerUpID;
-            public float ElapsedTime;
-            public float MaxTime;
-        }
 
         [System.Serializable]
         public struct Stats
@@ -52,23 +42,6 @@ namespace KartGame.KartSystems
             [Tooltip("Additional gravity for when the kart is in the air.")]
             public float AddedGravity;
 
-            // allow for stat adding for powerups.
-            public static Stats operator +(Stats a, Stats b)
-            {
-                return new Stats
-                {
-                    Acceleration = a.Acceleration + b.Acceleration,
-                    AccelerationCurve = a.AccelerationCurve + b.AccelerationCurve,
-                    Braking = a.Braking + b.Braking,
-                    CoastingDrag = a.CoastingDrag + b.CoastingDrag,
-                    AddedGravity = a.AddedGravity + b.AddedGravity,
-                    Grip = a.Grip + b.Grip,
-                    ReverseAcceleration = a.ReverseAcceleration + b.ReverseAcceleration,
-                    ReverseSpeed = a.ReverseSpeed + b.ReverseSpeed,
-                    TopSpeed = a.TopSpeed + b.TopSpeed,
-                    Steer = a.Steer + b.Steer,
-                };
-            }
         }
 
         public Rigidbody Rigidbody { get; private set; }
@@ -76,7 +49,7 @@ namespace KartGame.KartSystems
         public float AirPercent { get; private set; }
         public float GroundPercent { get; private set; }
 
-        public Movement.Stats baseStats = new Movement.Stats
+        public MovementKart.Stats baseStats = new MovementKart.Stats
         {
             TopSpeed = 10f,
             Acceleration = 5f,
@@ -159,8 +132,7 @@ namespace KartGame.KartSystems
 
         // can the kart move?
         bool m_CanMove = true;
-        List<StatPowerup> m_ActivePowerupList = new List<StatPowerup>();
-        Movement.Stats m_FinalStats;
+        MovementKart.Stats m_FinalStats;
 
         Quaternion m_LastValidRotation;
         Vector3 m_LastValidPosition;
@@ -168,7 +140,6 @@ namespace KartGame.KartSystems
         bool m_HasCollision;
         bool m_InAir = false;
 
-        public void AddPowerup(StatPowerup statPowerup) => m_ActivePowerupList.Add(statPowerup);
         public void SetCanMove(bool move) => m_CanMove = move;
         public float GetMaxSpeed() => Mathf.Max(m_FinalStats.TopSpeed, m_FinalStats.ReverseSpeed);
 
@@ -239,7 +210,11 @@ namespace KartGame.KartSystems
             GatherInputs();
 
             // apply our powerups to create our finalStats
-            TickPowerups();
+            // add powerups to our final stats
+            m_FinalStats = baseStats;
+
+            // clamp values in finalstats
+            m_FinalStats.Grip = Mathf.Clamp(m_FinalStats.Grip, 0, 1);
 
             // apply our physics properties
             Rigidbody.centerOfMass = transform.InverseTransformPoint(CenterOfMass.position);
@@ -284,32 +259,6 @@ namespace KartGame.KartSystems
             }
         }
 
-        void TickPowerups()
-        {
-            // remove all elapsed powerups
-            m_ActivePowerupList.RemoveAll((p) => { return p.ElapsedTime > p.MaxTime; });
-
-            // zero out powerups before we add them all up
-            var powerups = new Stats();
-
-            // add up all our powerups
-            for (int i = 0; i < m_ActivePowerupList.Count; i++)
-            {
-                var p = m_ActivePowerupList[i];
-
-                // add elapsed time
-                p.ElapsedTime += Time.fixedDeltaTime;
-
-                // add up the powerups
-                powerups += p.modifiers;
-            }
-
-            // add powerups to our final stats
-            m_FinalStats = baseStats + powerups;
-
-            // clamp values in finalstats
-            m_FinalStats.Grip = Mathf.Clamp(m_FinalStats.Grip, 0, 1);
-        }
 
         void GroundAirbourne()
         {
@@ -545,4 +494,3 @@ namespace KartGame.KartSystems
             ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);
         }
     }
-}

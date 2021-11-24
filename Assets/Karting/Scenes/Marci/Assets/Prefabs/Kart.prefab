@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6267352897708404416}
   - component: {fileID: 6267352897708404417}
   - component: {fileID: 7187714452596448368}
-  - component: {fileID: 7187714452596448369}
+  - component: {fileID: 3292926533399967853}
   m_Layer: 0
   m_Name: Kart
   m_TagString: Untagged
@@ -66,7 +66,7 @@ MonoBehaviour:
   TurnInputName: Horizontal
   AccelerateButtonName: Accelerate
   BrakeButtonName: Brake
---- !u!114 &7187714452596448369
+--- !u!114 &3292926533399967853
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -75,16 +75,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 6267352897708404419}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c919040593e90e4aae934846eb1ec64, type: 3}
+  m_Script: {fileID: 11500000, guid: d93ffdcd4f2b862488e115b95b879e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   baseStats:
-    TopSpeed: 100
-    Acceleration: 1
+    TopSpeed: 10
+    Acceleration: 5
     ReverseSpeed: 5
     ReverseAcceleration: 5
     AccelerationCurve: 4
-    Braking: 1
+    Braking: 10
     CoastingDrag: 4
     Grip: 0.95
     Steer: 5
@@ -96,16 +96,17 @@ MonoBehaviour:
   - {fileID: 6267352898188068887}
   CenterOfMass: {fileID: 6267352898217364276}
   AirborneReorientationCoefficient: 3
-  DriftGrip: 0.7
+  DriftGrip: 0.4
   DriftAdditionalSteer: 5
   MinAngleToFinishDrift: 10
   MinSpeedPercentToFinishDrift: 0.5
   DriftControl: 10
   DriftDampening: 10
-  DriftTrailPrefab: {fileID: 4162818498552360563, guid: b2760c993f819b44e840bfe1a2611ccc, type: 3}
+  DriftTrailPrefab: {fileID: 4162818498552360563, guid: b2760c993f819b44e840bfe1a2611ccc,
+    type: 3}
   DriftTrailVerticalOffset: 0
-  SuspensionHeight: 0.02
-  SuspensionSpring: 70000
+  SuspensionHeight: 0.2
+  SuspensionSpring: 20000
   SuspensionDamp: 500
   WheelsPositionVerticalOffset: 0
   FrontLeftWheel: {fileID: 6267352898666864276}

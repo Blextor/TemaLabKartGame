@@ -21,7 +21,7 @@ using UnityEngine;
         }
 
         [Tooltip("What kart do we want to listen to?")]
-        public Movement kartController;
+        public MovementKart kartController;
 
         [Space]
         [Tooltip("The damping for the appearance of steering compared to the input.  The higher the number the less damping.")]
