@@ -10,6 +10,8 @@
     "com.unity.ide.vscode": "1.2.4",
     "com.unity.learn.iet-framework": "1.2.3",
     "com.unity.ml-agents": "1.0.8",
+    "com.unity.multiplayer.tools": "1.0.0-pre.2",
+    "com.unity.netcode.gameobjects": "1.0.0-pre.3",
     "com.unity.postprocessing": "3.0.3",
     "com.unity.probuilder": "4.5.0",
     "com.unity.test-framework": "1.1.29",
