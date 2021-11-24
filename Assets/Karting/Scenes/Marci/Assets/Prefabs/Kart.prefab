@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3292926533399967853}
   m_Layer: 0
   m_Name: Kart
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -79,12 +79,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseStats:
-    TopSpeed: 10
+    TopSpeed: 50
     Acceleration: 5
     ReverseSpeed: 5
     ReverseAcceleration: 5
-    AccelerationCurve: 4
-    Braking: 10
+    AccelerationCurve: 1
+    Braking: 30
     CoastingDrag: 4
     Grip: 0.95
     Steer: 5
