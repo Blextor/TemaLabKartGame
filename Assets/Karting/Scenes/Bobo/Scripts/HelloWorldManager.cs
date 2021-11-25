@@ -133,6 +133,7 @@ public class HelloWorldManager : NetworkBehaviour
         
     }
 
+    /*
     [ServerRpc]
     private void SpawnExtrapointServerRpc(ulong netID)
     {
@@ -155,13 +156,20 @@ public class HelloWorldManager : NetworkBehaviour
 
 
     }
+    */
 
     public void Update()
     {
-        Thread th1 = new Thread(Provider);
-        th1.Name = "Provider";      // biztos ami biztos
-        th1.Start();
-        IPAddress.text = ipAddress;
+        if (!NetworkManager.Singleton.IsClient)
+        {
+            Thread th1 = new Thread(Provider);
+            th1.Name = "Provider";      // biztos ami biztos
+            th1.Start();
+            IPAddress.text = ipAddress;
+        } else
+        {
+            IPAddress.text = "";
+        }
 
 
         /*if (Input.GetKeyDown(KeyCode.M))
