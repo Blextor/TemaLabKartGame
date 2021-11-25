@@ -93,7 +93,7 @@ namespace PathCreation.Examples {
         {
 
          
-            GameObject car = GameObject.Find("Car02");
+            GameObject car = GameObject.Find("Kart");
             car.transform.position = RoadPoints[0];
             car.transform.rotation = Quaternion.Euler(0,path.GetRotation(0.0f).y*180,0);
             
