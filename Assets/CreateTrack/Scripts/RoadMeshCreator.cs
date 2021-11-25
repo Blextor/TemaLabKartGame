@@ -80,7 +80,7 @@ namespace PathCreation.Examples {
             for(int i = 0; i < numberOfPoints; i++)
             {
                 RaycastHit hit;
-                
+                //Debug.DrawRay(center, CirclePoints[i], Color.red,100);
                 if (Physics.Raycast(center, CirclePoints[i], out hit, 1000.0f,layerMask))
                 {
                     RoadPoints[i] =center + CirclePoints[i].normalized*Random.Range(hit.distance/2,hit.distance-30);
@@ -95,11 +95,13 @@ namespace PathCreation.Examples {
          
             GameObject car = GameObject.Find("Car02");
             car.transform.position = RoadPoints[0];
-
+            car.transform.rotation = Quaternion.Euler(0,path.GetRotation(0.0f).y*180,0);
+            
             GameObject startBoard = GameObject.Find("StartBoard");
             startBoard.transform.rotation = Quaternion.Euler(0,path.GetRotation(0.0f).y*180,0);
-            startBoard.transform.position = path.GetPointAtDistance(0.0f);
-            
+            Vector3 posStart= path.GetPointAtDistance(0.0f);
+            posStart.y = -5;
+            startBoard.transform.position = posStart;
             GameObject startLine = GameObject.Find("StartLine");
             startLine.transform.rotation = Quaternion.Euler(0, path.GetRotation(0.0f).y*180, 0);
             Vector3 pos = path.GetPointAtDistance(0.0f);
