@@ -121,7 +121,7 @@ WheelCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456936665}
   m_Center: {x: 0, y: 0, z: 0}
-  m_Radius: 0.14
+  m_Radius: 0.13
   m_SuspensionSpring:
     spring: 20000
     damper: 500
@@ -264,7 +264,7 @@ WheelCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 589798300}
   m_Center: {x: 0, y: 0, z: 0}
-  m_Radius: 0.14
+  m_Radius: 0.13
   m_SuspensionSpring:
     spring: 20000
     damper: 500
@@ -519,7 +519,7 @@ WheelCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 942790690}
   m_Center: {x: 0, y: 0, z: 0}
-  m_Radius: 0.14
+  m_Radius: 0.13
   m_SuspensionSpring:
     spring: 20000
     damper: 500
@@ -870,7 +870,7 @@ WheelCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1784236666}
   m_Center: {x: 0, y: 0, z: 0}
-  m_Radius: 0.14
+  m_Radius: 0.13
   m_SuspensionSpring:
     spring: 20000
     damper: 500
@@ -1064,10 +1064,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6267352897708404416}
   - component: {fileID: 6267352897708404417}
+  - component: {fileID: 1651895864}
   - component: {fileID: 7187714452596448368}
   - component: {fileID: 3292926533399967853}
-  - component: {fileID: 1651895864}
-  - component: {fileID: 1651895865}
+  - component: {fileID: 7972725367402991779}
   m_Layer: 0
   m_Name: Kart
   m_TagString: Player
@@ -1108,6 +1108,19 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &1651895864
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6267352897708404419}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1, y: 0.6, z: 1.3}
+  m_Center: {x: 0, y: 0.3, z: -0.23}
 --- !u!114 &7187714452596448368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1141,7 +1154,7 @@ MonoBehaviour:
     ReverseSpeed: 5
     ReverseAcceleration: 5
     AccelerationCurve: 1
-    Braking: 30
+    Braking: 7
     CoastingDrag: 5
     Grip: 0.95
     Steer: 5
@@ -1173,20 +1186,7 @@ MonoBehaviour:
   GroundLayers:
     serializedVersion: 2
     m_Bits: 4294967291
---- !u!65 &1651895864
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6267352897708404419}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.1, y: 0.6, z: 1.3}
-  m_Center: {x: 0, y: 0.3, z: -0.23}
---- !u!114 &1651895865
+--- !u!114 &7972725367402991779
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1198,7 +1198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9013b6d52a43b44ab31ad11d73df1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kartController: {fileID: 3292926533399967853}
+  kartController: {fileID: 0}
   steeringAnimationDamping: 10
   maxSteeringAngle: 30
   frontLeftWheel:
