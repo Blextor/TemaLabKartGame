@@ -18,7 +18,8 @@ public class HelloWorldPlayer : NetworkBehaviour
 
     public Rigidbody rigi;
     public NetworkTransform2 networkTransform;
-    
+    public GameObject ExtraPointGameObject;
+    public GameObject ExtraPointColliderGameObject;
 
     public override void OnNetworkSpawn()
     {
@@ -59,6 +60,17 @@ public class HelloWorldPlayer : NetworkBehaviour
         return new Vector3(Random.Range(-3f, 3f), 1f, Random.Range(-3f, 3f));
     }
 
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.gameObject.layer >= 0)
+        {
+            Debug.Log("Collide");
+        }
+        if (collision.collider.gameObject.layer == 15)
+        {
+            Debug.Log("ExtraPoint");
+        }
+    }
 
 
     [ServerRpc]
@@ -147,6 +159,30 @@ public class HelloWorldPlayer : NetworkBehaviour
         return ret;
     }
 
+    [ServerRpc]
+    private void SpawnExtrapointServerRpc(ulong netID)
+    {
+        Debug.Log("Probáljunk meg letenni egy Orb-ot");
+        GameObject go = Instantiate(ExtraPointGameObject);
+        go.GetComponent<NetworkObject>().SpawnWithOwnership(netID);
+        ulong itemNetID = go.GetComponent<NetworkObject>().NetworkObjectId;
+
+        SpawnExtrapointClientRpc(itemNetID);
+    }
+
+    [ClientRpc]
+    private void SpawnExtrapointClientRpc(ulong itemNetID)
+    {
+        Debug.Log("Sikerült letenni egy Orb-ot");
+        NetworkObject netObj = NetworkManager.SpawnManager.SpawnedObjects[itemNetID];
+
+
+
+
+
+    }
+
+
     void FixedUpdate()
     {
         
@@ -154,7 +190,7 @@ public class HelloWorldPlayer : NetworkBehaviour
         {
             //networkTransform.Interpolate = !networkTransform.Interpolate;
             //networkTransform.
-            Debug.Log("OK");
+            //Debug.Log("OK");
 
             if (NetworkManager.Singleton.IsServer)
             {
@@ -192,15 +228,24 @@ public class HelloWorldPlayer : NetworkBehaviour
                     DBtnUpServerRpc();
             }
 
+            
+
             if (NetworkManager.Singleton.IsServer)
             {
                 Vector3 velo = MoveRly();
                 rigi.AddForceAtPosition(velo, transform.position);
+                if (Input.GetKeyDown(KeyCode.M))
+                {
+                    Debug.Log("M pressed");
+                    SpawnExtrapointServerRpc(NetworkManager.Singleton.LocalClientId);
+                }
             }
             else
             {
                 MoveRlyRequestServerRpc();
                 rigi.AddForceAtPosition(Velocity.Value,transform.position);
+
+                
             }
         }
         

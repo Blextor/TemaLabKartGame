@@ -3,8 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.Netcode.Transports.UNET;
 using System.Threading;
+using System.Collections.Generic;
 
-public class HelloWorldManager : MonoBehaviour
+public class HelloWorldManager : NetworkBehaviour
 {
 
     public Text IPAddress;
@@ -12,10 +13,42 @@ public class HelloWorldManager : MonoBehaviour
     string stringToEdit = "";
     public UNetTransport script;
 
+    public NetworkObject ExtraPointNetworkObject;
+    public NetworkVariable<int> MyPointsNet = new NetworkVariable<int>();
+    public int MyPoints;
+    public NetworkVariable<bool> ActiveExtraPointNet = new NetworkVariable<bool>();
+    public bool activeExtraPoint;
+    public GameObject ExtraPointGameObject;
+
+
+    //private
+
     public void Start()
     {
         //IPAddress = GameObject.FindGameObjectWithTag("IP_address_Tag").GetComponent<Text>();
         script = GameObject.FindGameObjectWithTag("NetworkManagerTag").GetComponent<UNetTransport>();
+        if (NetworkManager.Singleton.IsServer)
+        {
+            StartingUp();
+            ExtraPointNetworkObject.SpawnWithOwnership(NetworkManager.Singleton.LocalClientId);
+        } else if (NetworkManager.Singleton.IsClient)
+        {
+            StartServerRpc();
+        }
+    }
+
+    [ServerRpc]
+    public void StartServerRpc()
+    {
+        StartingUp();
+    } 
+
+    private void StartingUp()
+    {
+        ActiveExtraPointNet.Value = true;
+        activeExtraPoint = true;
+        MyPointsNet.Value = 0;
+        MyPoints = 0;
     }
 
     private void Provider() // WorkingThread()
@@ -100,12 +133,48 @@ public class HelloWorldManager : MonoBehaviour
         
     }
 
+    [ServerRpc]
+    private void SpawnExtrapointServerRpc(ulong netID)
+    {
+        Debug.Log("Probáljunk meg letenni egy Orb-ot");
+        GameObject go = Instantiate(ExtraPointGameObject);
+        go.GetComponent<NetworkObject>().SpawnWithOwnership(netID);
+        ulong itemNetID = go.GetComponent<NetworkObject>().NetworkObjectId;
+
+        SpawnExtrapointClientRpc(itemNetID);
+    }
+
+    [ClientRpc]
+    private void SpawnExtrapointClientRpc(ulong itemNetID)
+    {
+        Debug.Log("Sikerült letenni egy Orb-ot");
+        NetworkObject netObj = NetworkManager.SpawnManager.SpawnedObjects[itemNetID];
+
+
+
+
+
+    }
+
     public void Update()
     {
         Thread th1 = new Thread(Provider);
         th1.Name = "Provider";      // biztos ami biztos
         th1.Start();
         IPAddress.text = ipAddress;
+
+
+        /*if (Input.GetKeyDown(KeyCode.M))
+        {
+            Debug.Log("M pressed");
+            SpawnExtrapointServerRpc(NetworkManager.Singleton.LocalClientId);
+        }*/
+
+        //if (!activeExtraPoint)
+          //  ExtraPointGameObject.GetComponent<PowerUpBobo>().DeActivate();
+        //else
+          //  ExtraPointGameObject.GetComponent<PowerUpBobo>().DeActivate();
+
 
     }
 

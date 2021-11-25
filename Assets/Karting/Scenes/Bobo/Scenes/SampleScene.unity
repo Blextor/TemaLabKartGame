@@ -440,6 +440,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IPAddress: {fileID: 1006056022}
   script: {fileID: 2037119365}
+  ExtraPointNetworkObject: {fileID: 0}
+  MyPointsNet:
+    m_InternalValue: 0
+  MyPoints: 0
+  ActiveExtraPointNet:
+    m_InternalValue: 0
+  activeExtraPoint: 0
+  ExtraPointGameObject: {fileID: 0}
 --- !u!4 &355085292
 Transform:
   m_ObjectHideFlags: 0
@@ -1325,15 +1333,24 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 2037119365}
-    PlayerPrefab: {fileID: 2652839727172615128, guid: a5b747f8280a8ef40825e86ff8042fc5, type: 3}
+    PlayerPrefab: {fileID: 6888234565932611198, guid: a5b747f8280a8ef40825e86ff8042fc5,
+      type: 3}
     NetworkPrefabs:
     - Override: 0
-      Prefab: {fileID: 8741482339114353070, guid: 7d06d980e5185874aa20adb1a4bdd7bf, type: 3}
+      Prefab: {fileID: 8741482339114353070, guid: 7d06d980e5185874aa20adb1a4bdd7bf,
+        type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
-      Prefab: {fileID: 2652839727172615128, guid: a5b747f8280a8ef40825e86ff8042fc5, type: 3}
+      Prefab: {fileID: 6888234565932611198, guid: a5b747f8280a8ef40825e86ff8042fc5,
+        type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 6425362340351713723, guid: c320011607975344792e7b8c63055d32,
+        type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
