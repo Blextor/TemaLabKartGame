@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PowerUpBobo : MonoBehaviour
@@ -22,6 +23,8 @@ public class PowerUpBobo : MonoBehaviour
     {
         Debug.Log("Trigger");
         DeActivate();
+        HelloWorldPlayer script = other.gameObject.GetComponent<HelloWorldPlayer>();
+        script.GetExtraPoint(GetComponent<NetworkObject>().NetworkObjectId);
     }
     public void DeActivate()
     {

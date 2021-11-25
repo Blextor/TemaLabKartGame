@@ -21,17 +21,32 @@ public class HelloWorldPlayer : NetworkBehaviour
     public GameObject ExtraPointGameObject;
     public GameObject ExtraPointColliderGameObject;
 
+    public float time;
+    public float lastPowerUp;
+
+    public NetworkVariable<float> PointsNet = new NetworkVariable<float>();
+    public float points;
+
+    public Material[] colors = new Material[4];
+    public Material myMaterial;
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
         {
             Move();
-
+            
             
         }
     }
 
-    public void Move()
+    public void Start()
+    {
+        //myMaterial = GetComponent<Renderer>().material;
+        GetComponent<Renderer>().material = colors[GameObject.FindGameObjectsWithTag("BoboPlayer").Length-1];
+        //myMaterial = colors[GameObject.FindGameObjectsWithTag("BoboPlayer").Length]; 
+    }
+
+    public void Move() 
     {
         if (NetworkManager.Singleton.IsServer)
         {
@@ -39,6 +54,7 @@ public class HelloWorldPlayer : NetworkBehaviour
             transform.position = randomPosition;
             Position.Value = randomPosition;
             GlobalSpeedModifyer.Value = 10f;
+            //myMaterial = colors[GameObject.FindGameObjectsWithTag("BoboPlayer").Length];
         }
         else
         {
@@ -52,24 +68,13 @@ public class HelloWorldPlayer : NetworkBehaviour
         Position.Value = GetRandomPositionOnPlane();
         transform.position = Position.Value;
         GlobalSpeedModifyer.Value = 10f;
+        //myMaterial = colors[GameObject.FindGameObjectsWithTag("BoboPlayer").Length];
     }
 
 
     static Vector3 GetRandomPositionOnPlane()
     {
         return new Vector3(Random.Range(-3f, 3f), 1f, Random.Range(-3f, 3f));
-    }
-
-    public void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.gameObject.layer >= 0)
-        {
-            Debug.Log("Collide");
-        }
-        if (collision.collider.gameObject.layer == 15)
-        {
-            Debug.Log("ExtraPoint");
-        }
     }
 
 
@@ -175,19 +180,62 @@ public class HelloWorldPlayer : NetworkBehaviour
     {
         Debug.Log("Sikerült letenni egy Orb-ot");
         NetworkObject netObj = NetworkManager.SpawnManager.SpawnedObjects[itemNetID];
-
-
-
-
-
     }
 
 
-    void FixedUpdate()
+    public void GetExtraPoint(ulong itemNetID)
     {
-        
+        Debug.Log("GetExtraPoint");
+        if (NetworkManager.IsClient)
+            DeSpawnExtrapointServerRpc(itemNetID);
+    }
+
+
+    [ServerRpc]
+    private void DeSpawnExtrapointServerRpc(ulong netID)
+    {
+        Debug.Log("GetExtraPoint");
+        NetworkManager.SpawnManager.SpawnedObjects[netID].RemoveOwnership();
+        NetworkManager.SpawnManager.SpawnedObjects[netID].Despawn();
+        PointsNet.Value += 5f;
+        points += 5f;
+        //Debug.Log("Probáljunk meg felszedni az Orb-ot");
+        //GameObject go = Instantiate(ExtraPointGameObject);
+        //go.GetComponent<NetworkObject>().SpawnWithOwnership(netID);
+        //ulong itemNetID = go.GetComponent<NetworkObject>().NetworkObjectId;
+
+        //SpawnExtrapointClientRpc(itemNetID);
+    }
+
+
+
+    private void EarnPoints()
+    {
+        Debug.Log("EarnPoints");
+        if (transform.position.magnitude <= 2)
+        {
+            
+            InnerCircleServerRpc();
+        }
+    }
+
+    [ServerRpc]
+    private void InnerCircleServerRpc()
+    {
+        Debug.Log("Inner");
+        float plusPoints = Time.deltaTime;
+        PointsNet.Value += plusPoints;
+        points += plusPoints;
+    }
+
+    public void FixedUpdate()
+    {
+        //myMaterial = colors[GameObject.FindGameObjectsWithTag("BoboPlayer").Length];
         if (IsOwner)
         {
+            if (Input.GetKey(KeyCode.K))
+                myMaterial.color = Color.black;
+            EarnPoints();
             //networkTransform.Interpolate = !networkTransform.Interpolate;
             //networkTransform.
             //Debug.Log("OK");
@@ -227,8 +275,18 @@ public class HelloWorldPlayer : NetworkBehaviour
                 else
                     DBtnUpServerRpc();
             }
+        }
 
-            
+    }
+
+    public void Update()
+    {
+        
+        if (IsOwner)
+        {
+            //networkTransform.Interpolate = !networkTransform.Interpolate;
+            //networkTransform.
+            //Debug.Log("OK");
 
             if (NetworkManager.Singleton.IsServer)
             {
