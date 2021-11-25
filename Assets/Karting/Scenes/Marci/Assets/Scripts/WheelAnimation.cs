@@ -4,8 +4,7 @@ using UnityEngine;
     [DefaultExecutionOrder(100)]
     public class WheelAnimation : MonoBehaviour
     {
-        [Serializable]
-        public class Wheel
+        [Serializable] public class Wheel
         {
             [Tooltip("A reference to the transform of the wheel.")]
             public Transform wheelTransform;
