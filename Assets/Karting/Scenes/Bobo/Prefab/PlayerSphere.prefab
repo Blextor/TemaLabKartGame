@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 6888234565932611199}
   m_Layer: 0
   m_Name: PlayerSphere
-  m_TagString: Untagged
+  m_TagString: BoboPlayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34,8 +34,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.6810577, y: 0.123348236, z: 0.8589245}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 6888234565956274743}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -207,62 +206,15 @@ MonoBehaviour:
   networkTransform: {fileID: 6888234565932611197}
   ExtraPointGameObject: {fileID: 6425362340351713723, guid: c320011607975344792e7b8c63055d32,
     type: 3}
-  ExtraPointColliderGameObject: {fileID: 6888234565956274742}
---- !u!1 &6888234565956274742
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6888234565956274743}
-  - component: {fileID: 6888234565956274740}
-  - component: {fileID: 3823084509607277586}
-  m_Layer: 15
-  m_Name: GBExtraPointCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6888234565956274743
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6888234565956274742}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6888234565932610951}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &6888234565956274740
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6888234565956274742}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3823084509607277586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6888234565956274742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 652917a69974e3c4cbf3a9d7782a29ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Parent: {fileID: 0}
+  ExtraPointColliderGameObject: {fileID: 0}
+  time: 0
+  lastPowerUp: 0
+  PointsNet:
+    m_InternalValue: 0
+  points: 0
+  colors:
+  - {fileID: 2100000, guid: a79b7895c8295024bb0bc676afda0988, type: 2}
+  - {fileID: 2100000, guid: b5ef0f43361dc684e9d162628cbaa835, type: 2}
+  - {fileID: 2100000, guid: f9b6bd13969aa1640a3d746a59f35136, type: 2}
+  - {fileID: 2100000, guid: 0c26ae84e41e0c44a93ebee0245f0980, type: 2}
+  myMaterial: {fileID: 2100000, guid: a79b7895c8295024bb0bc676afda0988, type: 2}

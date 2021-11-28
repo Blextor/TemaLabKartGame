@@ -60,7 +60,7 @@ using UnityEngine;
             frontLeftWheel.wheelCollider.steerAngle = rotationAngle;
             frontRightWheel.wheelCollider.steerAngle = rotationAngle;
 
-            // Update position and rotation from WheelCollider
+        // Update position and rotation from WheelCollider
             UpdateWheelFromCollider(frontLeftWheel);
             UpdateWheelFromCollider(frontRightWheel);
             UpdateWheelFromCollider(rearLeftWheel);
