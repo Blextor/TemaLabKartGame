@@ -9,13 +9,13 @@ namespace PathCreation.Examples
         [Header("Road settings")]
         public float roadWidth = 0.1f;
         
-        public float thickness = 3.0f;
+        public float thickness = 3f;
         public bool flattenSurface;
 
         [Header("Material settings")]
         public Material roadMaterial;
         public Material undersideMaterial;
-        public float textureTiling = 20;
+        public float textureTiling = 0;
 
         [SerializeField, HideInInspector]
         GameObject meshHolder;
@@ -28,10 +28,10 @@ namespace PathCreation.Examples
         float radius;
         int numberOfPoints;
 
-        void Start()
+        void Awake()
         {
-
-            /*VertexPath mainPath = GameObject.Find("RoadCreator").GetComponent<RoadMeshCreator>().pathCreator.path;
+            Vector3[] roadPoints = GameObject.Find("RoadCreator").GetComponent<RoadMeshCreator>().RoadPoints;
+            VertexPath mainPath = GameObject.Find("RoadCreator").GetComponent<RoadMeshCreator>().pathCreator.path;
             float roadWidth = GameObject.Find("RoadCreator").GetComponent<RoadMeshCreator>().roadWidth;
             List<Vector3> sidePoints = new List<Vector3>();
             Vector3 lastAdded = mainPath.GetPoint(0) - mainPath.GetNormal(0) * roadWidth;
@@ -39,22 +39,28 @@ namespace PathCreation.Examples
             for (int i = 1; i < mainPath.NumPoints - 1; i++)
             {
                 Vector3 pointToAdd = mainPath.GetPoint(i) - mainPath.GetNormal(i) * roadWidth;
-                if (Vector3.Distance(pointToAdd, lastAdded) > 7)
+                bool add = false;
+                for (int j = 0; j < roadPoints.Length; j++)
+                {
+                    if (Vector3.Distance(mainPath.GetPoint(i), roadPoints[j]) < 40 &&
+                        Vector3.Distance(lastAdded, pointToAdd) > 4)
+
+                    {
+                        add = true;
+                    }
+
+                }
+
+
+                if (Vector3.Distance(pointToAdd, lastAdded) > 40 || add)
                 {
                     sidePoints.Add(pointToAdd);
                     lastAdded = pointToAdd;
                 }
-
             }
-            Debug.Log(sidePoints.Count);*/
-            Vector3[] RoadPoints = GameObject.Find("RoadCreator").GetComponent<RoadMeshCreator>().RoadPoints;
-            Vector3[] SidePoints = new Vector3[RoadPoints.Length];
-            for (int i = 0; i < RoadPoints.Length; i++)
-            {
-                SidePoints[i] = center + RoadPoints[i].normalized * (Vector3.Distance(center,RoadPoints[i]) + 20);
-            }
+    
 
-            GeneratePath(SidePoints, true);
+                GeneratePath(sidePoints.ToArray(), true);
             PathUpdated();
         }
 
@@ -64,8 +70,10 @@ namespace PathCreation.Examples
             // Create a closed, 2D bezier path from the supplied points array
             // These points are treated as anchors, which the path will pass through
             // The control points for the path will be generated automatically
-            BezierPath bezierPath = new BezierPath(points, closedPath, PathSpace.xyz);
-            bezierPath.GlobalNormalsAngle = 180;
+            BezierPath bezierPath = new BezierPath(points, closedPath, PathSpace.xz);
+            bezierPath.FlipNormals = true;
+            bezierPath.Space = PathSpace.xz;
+
             pathCreator.GetComponent<PathCreator>().bezierPath = bezierPath;
             // Then create a vertex path from the bezier path, to be used for movement etc
             return new VertexPath(bezierPath, meshHolder.transform);
@@ -77,11 +85,18 @@ namespace PathCreation.Examples
         {
             if (pathCreator != null)
             {
-                //CreateRoadMesh();
+                
                 AssignMeshComponents();
                 AssignMaterials();
-                //CreateRoadMesh();
-
+                CreateRoadMesh();
+                Rigidbody meshHolderRigidbody = meshHolder.AddComponent<Rigidbody>();
+                meshHolderRigidbody.isKinematic = true;
+                meshHolderRigidbody.mass = 10000;
+                MeshCollider meshHolderCollider = meshHolder.AddComponent<MeshCollider>();
+                meshHolderCollider.convex = false;
+                //meshHolderCollider.sharedMesh = CreateRoadMesh();
+                meshHolderCollider.sharedMesh = mesh;
+                meshHolderCollider.enabled = true;
 
             }
         }
@@ -209,14 +224,10 @@ namespace PathCreation.Examples
             if (mesh == null)
             {
                 mesh = new Mesh();
+                mesh.name = "RoadSideMeshA";
             }
             meshFilter.sharedMesh = mesh;
-            Rigidbody meshHolderRigidbody = meshHolder.AddComponent<Rigidbody>();
-            meshHolderRigidbody.isKinematic = true;
-            MeshCollider meshHolderCollider = meshHolder.AddComponent<MeshCollider>();
-            meshHolderCollider.convex = false;
-            meshHolderCollider.sharedMesh = CreateRoadMesh();
-            meshHolderCollider.enabled = true;
+ 
 
         }
 

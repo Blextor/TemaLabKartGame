@@ -13,8 +13,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - RoadSideColliders
+  - StadiumCollider
   - PostProcessing
   - Ground
   - Environment

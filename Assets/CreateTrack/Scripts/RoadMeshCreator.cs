@@ -5,7 +5,7 @@ using UnityEngine;
 namespace PathCreation.Examples {
     public class RoadMeshCreator : PathSceneTool {
         [Header ("Road settings")]
-        public float roadWidth = 20.0f;
+        public float roadWidth = 15.0f;
         
         public float thickness = 5f;
         public bool flattenSurface;
@@ -13,7 +13,7 @@ namespace PathCreation.Examples {
         [Header ("Material settings")]
         public Material roadMaterial;
         public Material undersideMaterial;
-        public float textureTiling = 1;
+        public float textureTiling = 0;
 
         [SerializeField, HideInInspector]
         GameObject meshHolder;
@@ -27,9 +27,15 @@ namespace PathCreation.Examples {
         public Vector3[] RoadPoints;
         float radius;
         int numberOfPoints;
+        public GameObject ramp;
+        public List<GameObject> ramps;
         private void Awake()
         {
-             
+            for (int i = 0; i < ramps.Count; i++)
+            {
+                DestroyImmediate(ramps[i]);
+            }
+             ramps = new List<GameObject>();
              numberOfPoints = 20;
              RoadPoints = new Vector3[numberOfPoints];
              CirclePoints = new Vector3[numberOfPoints];
@@ -41,40 +47,7 @@ namespace PathCreation.Examples {
                  CirclePoints[i] = new Vector3(center.x + radius * Mathf.Cos(phi), 0.0f, center.z + radius * Mathf.Sin(phi));
                  
              }
-            /*
-           CirclePoints[0] = new Vector3(198.56f,0f,0f);
-           CirclePoints[1] = new Vector3(193.57f,0f,61.47f);
-           CirclePoints[2] = new Vector3(173.96f,0f,144.25f);
-           CirclePoints[3] = new Vector3(133.04f,0f,226.77f);
-           CirclePoints[4] = new Vector3(65.86f,0f,289.64f);
-           CirclePoints[5] = new Vector3(-31.66f,0f,301.62f);
-           CirclePoints[6] = new Vector3(-111.26f,0f,254.61f);
-           CirclePoints[7] = new Vector3(-158f,0f,180.27f);
-           CirclePoints[8] = new Vector3(-183.62f,0f,117.5f);
-           CirclePoints[9] = new Vector3(-192.62f,0f,61.8f);
-           CirclePoints[10] = new Vector3(-197.33f,0f,-0.87f);
-           CirclePoints[11] = new Vector3(-195.23f,0f,-61.8f);
-           CirclePoints[12] = new Vector3(-174.37f,0f,-142.6f);
-           CirclePoints[13] = new Vector3(-149.55f, 0f, -199.24f);
-           CirclePoints[14] = new Vector3(-84.08f,0f,-278.29f);
-           CirclePoints[15] = new Vector3(-1.76f,0f,-302.72f);
-           CirclePoints[16] = new Vector3(93.96f,0f,-270.86f);
-           CirclePoints[17] = new Vector3(150.76f,0f,-193.48f);
-           CirclePoints[18] = new Vector3(174.86f,0f,-133.76f);
-           CirclePoints[19] = new Vector3(192.48f,0f,-73.5f);
-
-           GeneratePath(CirclePoints, true); ;
-           PathUpdated();
-           */
-            /*
-            float t = 0.0f;
-            float addition = 1.0f / numberOfPoints;
-            
-            for (int i = 0; i < numberOfPoints; i++)
-            {
-                CirclePoints[i] = CirclePoints[i] - pathCreator.path.GetNormal(t) * Random.Range(0.0f, Vector3.Distance(center, CirclePoints[i]) / 2);
-                t += addition;
-            }*/
+           
 
             int layerMask = 1 << 7; 
             for(int i = 0; i < numberOfPoints; i++)
@@ -86,27 +59,81 @@ namespace PathCreation.Examples {
                     RoadPoints[i] =center + CirclePoints[i].normalized*Random.Range(hit.distance/2,hit.distance-30);
                 } 
             }
+            
+             
+            
             GeneratePath(RoadPoints, true);
             PathUpdated();
-        }
-        void Start()
-        {
 
-         
             GameObject car = GameObject.Find("Kart");
             car.transform.position = RoadPoints[0];
-            car.transform.rotation = Quaternion.Euler(0,path.GetRotation(0.0f).y*180,0);
-            
+            car.transform.rotation = Quaternion.Euler(0, path.GetRotation(0.0f).y * 180, 0);
+
             GameObject startBoard = GameObject.Find("StartBoard");
-            startBoard.transform.rotation = Quaternion.Euler(0,path.GetRotation(0.0f).y*180,0);
-            Vector3 posStart= path.GetPointAtDistance(0.0f);
+            startBoard.transform.rotation = Quaternion.Euler(0, path.GetRotation(0.0f).y * 180, 0);
+            Vector3 posStart = path.GetPointAtDistance(0.0f);
             posStart.y = -5;
             startBoard.transform.position = posStart;
             GameObject startLine = GameObject.Find("StartLine");
-            startLine.transform.rotation = Quaternion.Euler(0, path.GetRotation(0.0f).y*180, 0);
+            startLine.transform.rotation = Quaternion.Euler(0, path.GetRotation(0.0f).y * 180, 0);
             Vector3 pos = path.GetPointAtDistance(0.0f);
             pos.y += 0.1f;
             startLine.transform.position = pos;
+
+        }
+        void Start()
+        {
+            ramp.transform.localScale =new Vector3(18,7,10);
+            int layerMask = 1 << 6;
+
+             /*for( int i = 1; i < RoadPoints.Length-2; i++)
+             {
+
+                 RaycastHit[] hitsForward;
+                 RaycastHit[] hitsBackward;
+                 hitsForward = Physics.RaycastAll(RoadPoints[i], (RoadPoints[i + 1] - RoadPoints[i]),1000.0f,layerMask);
+                 hitsBackward = Physics.RaycastAll(RoadPoints[i], (RoadPoints[i-1] - RoadPoints[i]),1000.0f,layerMask);
+                 if(hitsForward.Length != 0 && hitsBackward.Length != 0)
+                 {
+                     if(hitsForward[0].distance > 70 && hitsBackward[0].distance > 30)
+                     {
+                         //ramp.transform.rotation = Quaternion.Euler(path.GetDirection(path.GetClosestTimeOnPath(RoadPoints[i + 1]))*180);
+                         ramps.Add(Instantiate(ramp, RoadPoints[i],ramp.transform.rotation));
+                         i += 3;
+                     }
+
+                 }
+             }*/
+            float t = 0.1f;
+            float addition = 0.02f;
+            while(t < 0.9f)
+            {
+
+                RaycastHit[] hitsForward;
+                RaycastHit[] hitsBackward;
+                //hitsForward = Physics.RaycastAll(path.GetPointAtTime(t), path.GetPointAtTime(t+addition) - path.GetPointAtTime(t), 3000.0f, layerMask);
+                hitsForward = Physics.RaycastAll(path.GetPointAtTime(t), path.GetDirection(t), 3000.0f, layerMask);
+                //hitsBackward = Physics.RaycastAll(path.GetPointAtTime(t), (path.GetPointAtTime(t-addition) - path.GetPointAtTime(t)), 1000.0f, layerMask);
+                
+
+               
+                if (hitsForward.Length != 0)
+                {
+                    hitsBackward = Physics.RaycastAll(hitsForward[0].point + (path.GetPointAtTime(t) - hitsForward[0].point).normalized*10, (path.GetPointAtTime(t) - hitsForward[0].point), 3000.0f, layerMask);
+                    if (hitsBackward.Length != 0)
+                    {
+                        if (hitsForward[0].distance > 100 && hitsBackward[0].distance - hitsForward[0].distance >50)
+                        {
+                            ramp.transform.rotation = Quaternion.Euler(0, path.GetRotation(t).eulerAngles.y, 0);
+                            ramps.Add(Instantiate(ramp, path.GetPointAtTime(t), ramp.transform.rotation));
+                            t += addition*5;
+                        } else { t += addition; }
+                    } else { t += addition; }
+                    
+
+                } else { t += addition; }
+                
+            }
         }
 
         VertexPath GeneratePath(Vector3[] points, bool closedPath)
@@ -116,7 +143,8 @@ namespace PathCreation.Examples {
             // These points are treated as anchors, which the path will pass through
             // The control points for the path will be generated automatically
             BezierPath bezierPath = new BezierPath(points, closedPath, PathSpace.xyz);
-           
+            
+         
             pathCreator.GetComponent<PathCreator>().bezierPath = bezierPath;
 
             // Then create a vertex path from the bezier path, to be used for movement etc
@@ -229,7 +257,7 @@ namespace PathCreation.Examples {
             }
             if (meshHolder == null) {
                 meshHolder = new GameObject ("Road Mesh Holder");
-                meshHolder.layer = 6; //RoadMesh layer-hez tartozzon
+                meshHolder.layer = 0; //RoadMesh layer-hez tartozzon
             }
 
             meshHolder.transform.rotation = Quaternion.identity;
@@ -248,14 +276,17 @@ namespace PathCreation.Examples {
             meshFilter = meshHolder.GetComponent<MeshFilter> ();
             if (mesh == null) {
                 mesh = new Mesh ();
+                mesh.name = "RoadMesh";
             }
             meshFilter.sharedMesh = mesh;
             Rigidbody meshHolderRigidbody = meshHolder.AddComponent<Rigidbody>();
             meshHolderRigidbody.isKinematic = true;
+            meshHolderRigidbody.mass = 10000;
             MeshCollider meshHolderCollider = meshHolder.AddComponent<MeshCollider>();
             meshHolderCollider.convex = false;
             meshHolderCollider.sharedMesh = CreateRoadMesh();
             meshHolderCollider.enabled = true;
+
 
         }
 
