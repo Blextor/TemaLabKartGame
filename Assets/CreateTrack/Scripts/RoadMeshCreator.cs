@@ -111,19 +111,28 @@ namespace PathCreation.Examples {
 
                 RaycastHit[] hitsForward;
                 RaycastHit[] hitsBackward;
-                //hitsForward = Physics.RaycastAll(path.GetPointAtTime(t), path.GetPointAtTime(t+addition) - path.GetPointAtTime(t), 3000.0f, layerMask);
-                hitsForward = Physics.RaycastAll(path.GetPointAtTime(t), path.GetDirection(t), 3000.0f, layerMask);
+                hitsForward = Physics.RaycastAll(path.GetPointAtTime(t), path.GetPointAtTime(t+addition*3) - path.GetPointAtTime(t), 3000.0f, layerMask);
+               // hitsForward = Physics.RaycastAll(path.GetPointAtTime(t), path.GetDirection(t), 3000.0f, layerMask);
                 //hitsBackward = Physics.RaycastAll(path.GetPointAtTime(t), (path.GetPointAtTime(t-addition) - path.GetPointAtTime(t)), 1000.0f, layerMask);
                 
 
                
                 if (hitsForward.Length != 0)
                 {
-                    hitsBackward = Physics.RaycastAll(hitsForward[0].point + (path.GetPointAtTime(t) - hitsForward[0].point).normalized*10, (path.GetPointAtTime(t) - hitsForward[0].point), 3000.0f, layerMask);
+                    hitsBackward = Physics.RaycastAll(hitsForward[0].point + (path.GetPointAtTime(t) - hitsForward[0].point).normalized*10, path.GetPointAtTime(t) - hitsForward[0].point, 3000.0f, layerMask);
                     if (hitsBackward.Length != 0)
                     {
-                        if (hitsForward[0].distance > 100 && hitsBackward[0].distance - hitsForward[0].distance >50)
+                        if (hitsForward[0].distance > 70 && hitsBackward[hitsBackward.Length - 1].distance - hitsForward[0].distance > 100)
                         {
+                           
+                            //Debug.DrawRay(path.GetPointAtTime(t), path.GetPointAtTime(t + addition * 3) - path.GetPointAtTime(t),Color.black,10000.0f);
+                           // Debug.DrawRay(hitsForward[0].point + (path.GetPointAtTime(t) - hitsForward[0].point).normalized * 2, path.GetPointAtTime(t) - hitsForward[0].point,Color.red,10000.0f);
+                          
+                           /* GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                            Instantiate(sphere, hitsBackward[hitsBackward.Length - 1].point, transform.rotation);
+                            Instantiate(cube, hitsForward[0].point, transform.rotation);
+                            Debug.Log(hitsBackward[hitsBackward.Length-1] .collider +"  "+ hitsForward[0].collider);*/
                             ramp.transform.rotation = Quaternion.Euler(0, path.GetRotation(t).eulerAngles.y, 0);
                             ramps.Add(Instantiate(ramp, path.GetPointAtTime(t), ramp.transform.rotation));
                             t += addition*5;
