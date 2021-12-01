@@ -111,28 +111,30 @@ namespace PathCreation.Examples {
 
                 RaycastHit[] hitsForward;
                 RaycastHit[] hitsBackward;
-                hitsForward = Physics.RaycastAll(path.GetPointAtTime(t), path.GetPointAtTime(t+addition*3) - path.GetPointAtTime(t), 3000.0f, layerMask);
-               // hitsForward = Physics.RaycastAll(path.GetPointAtTime(t), path.GetDirection(t), 3000.0f, layerMask);
+                hitsForward = Physics.RaycastAll(path.GetPointAtTime(t), path.GetPointAtTime(t+addition) - path.GetPointAtTime(t), 3000.0f, layerMask);
+                //hitsForward = Physics.RaycastAll(path.GetPointAtTime(t), path.GetDirection(t), 3000.0f, layerMask);
                 //hitsBackward = Physics.RaycastAll(path.GetPointAtTime(t), (path.GetPointAtTime(t-addition) - path.GetPointAtTime(t)), 1000.0f, layerMask);
                 
 
                
                 if (hitsForward.Length != 0)
                 {
-                    hitsBackward = Physics.RaycastAll(hitsForward[0].point + (path.GetPointAtTime(t) - hitsForward[0].point).normalized*10, path.GetPointAtTime(t) - hitsForward[0].point, 3000.0f, layerMask);
+                    hitsBackward = Physics.RaycastAll(FindClosestHit(hitsForward).point + (path.GetPointAtTime(t) - FindClosestHit(hitsForward).point).normalized*10, path.GetPointAtTime(t) - FindClosestHit(hitsForward).point, 3000.0f, layerMask);
                     if (hitsBackward.Length != 0)
                     {
-                        if (hitsForward[0].distance > 70 && hitsBackward[hitsBackward.Length - 1].distance - hitsForward[0].distance > 100)
+                        if (FindClosestHit(hitsForward).distance > 70 && FindClosestHit(hitsBackward).distance - FindClosestHit(hitsForward).distance > 70)
                         {
                            
                             //Debug.DrawRay(path.GetPointAtTime(t), path.GetPointAtTime(t + addition * 3) - path.GetPointAtTime(t),Color.black,10000.0f);
                            // Debug.DrawRay(hitsForward[0].point + (path.GetPointAtTime(t) - hitsForward[0].point).normalized * 2, path.GetPointAtTime(t) - hitsForward[0].point,Color.red,10000.0f);
                           
-                           /* GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                            /*GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                            Instantiate(sphere, hitsBackward[hitsBackward.Length - 1].point, transform.rotation);
-                            Instantiate(cube, hitsForward[0].point, transform.rotation);
-                            Debug.Log(hitsBackward[hitsBackward.Length-1] .collider +"  "+ hitsForward[0].collider);*/
+                            sphere.transform.localScale = new Vector3(15, 15, 15);
+                            cube.transform.localScale = new Vector3(15, 15, 15);
+                            Instantiate(sphere, FindClosestHit(hitsBackward).point, transform.rotation);
+                            Instantiate(cube, FindClosestHit(hitsForward).point, transform.rotation);
+                            Debug.Log("Back: "+hitsBackward.Length +"  Forward: "+ hitsForward.Length);*/
                             ramp.transform.rotation = Quaternion.Euler(0, path.GetRotation(t).eulerAngles.y, 0);
                             ramps.Add(Instantiate(ramp, path.GetPointAtTime(t), ramp.transform.rotation));
                             t += addition*5;
@@ -145,6 +147,20 @@ namespace PathCreation.Examples {
             }
         }
 
+        RaycastHit FindClosestHit(RaycastHit[] hits)
+        {
+            RaycastHit min = hits[0];
+           
+            for(int i= 1; i < hits.Length; i++)
+            {
+                if(hits[i].distance < min.distance)
+                {
+                    min = hits[i];
+                    
+                }
+            }
+            return min;
+        }
         VertexPath GeneratePath(Vector3[] points, bool closedPath)
         {
             //pathCreator = new PathCreator();
