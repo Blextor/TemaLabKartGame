@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   frontDriverW: {fileID: 546266802864536835}
   frontPassengerW: {fileID: 546266802745933497}
-  rearDriverW: {fileID: 546266802864536835}
+  rearDriverW: {fileID: 546266801554370395}
   rearPassengerW: {fileID: 546266803418540541}
   frontDriverT: {fileID: 5867810442028022708}
   frontPassengerT: {fileID: 5867810442211260340}
   rearDriverT: {fileID: 5867810441902010898}
   rearPassengerT: {fileID: 5867810442388581682}
   maxSteerAngle: 30
-  motorForce: 200
+  motorForce: 500
 --- !u!1001 &546266803268347175
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43,7 +43,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 456936666, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
       propertyPath: m_SuspensionDistance
-      value: 0.02
+      value: 0.12
       objectReference: {fileID: 0}
     - target: {fileID: 456936666, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
       propertyPath: m_ForceAppPointDistance
@@ -79,7 +79,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 589798302, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
       propertyPath: m_SuspensionDistance
-      value: 0.02
+      value: 0.12
       objectReference: {fileID: 0}
     - target: {fileID: 589798302, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
       propertyPath: m_ForceAppPointDistance
@@ -115,7 +115,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 942790692, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
       propertyPath: m_SuspensionDistance
-      value: 0.02
+      value: 0.12
       objectReference: {fileID: 0}
     - target: {fileID: 942790692, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
       propertyPath: m_ForceAppPointDistance
@@ -159,7 +159,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1784236668, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
       propertyPath: m_SuspensionDistance
-      value: 0.02
+      value: 0.12
       objectReference: {fileID: 0}
     - target: {fileID: 1784236668, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
       propertyPath: m_ForceAppPointDistance
@@ -193,18 +193,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6267352897708404416, guid: cec76b568170efd41ad1c59ca0fed18e,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6267352897708404416, guid: cec76b568170efd41ad1c59ca0fed18e,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6267352897708404416, guid: cec76b568170efd41ad1c59ca0fed18e,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6267352897708404416, guid: cec76b568170efd41ad1c59ca0fed18e,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.975851
+      value: 13.206957
       objectReference: {fileID: 0}
     - target: {fileID: 6267352897708404416, guid: cec76b568170efd41ad1c59ca0fed18e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.96
+      value: 0.250333
       objectReference: {fileID: 0}
     - target: {fileID: 6267352897708404416, guid: cec76b568170efd41ad1c59ca0fed18e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.895527
+      value: -19.19483
       objectReference: {fileID: 0}
     - target: {fileID: 6267352897708404416, guid: cec76b568170efd41ad1c59ca0fed18e,
         type: 3}
@@ -251,10 +266,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kart Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 6267352898147395591, guid: cec76b568170efd41ad1c59ca0fed18e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -4795207165299755948, guid: c9b2b458d1b2ab04c87c184e5c999111,
+        type: 3}
     m_RemovedComponents:
     - {fileID: 3292926533399967853, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
     - {fileID: 7972725367402991779, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
     - {fileID: 7187714452596448368, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
+    - {fileID: 1651895864, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cec76b568170efd41ad1c59ca0fed18e, type: 3}
 --- !u!1 &5867810442936142820 stripped
 GameObject:
@@ -295,6 +317,12 @@ WheelCollider:
 --- !u!146 &546266802745933497 stripped
 WheelCollider:
   m_CorrespondingSourceObject: {fileID: 589798302, guid: cec76b568170efd41ad1c59ca0fed18e,
+    type: 3}
+  m_PrefabInstance: {fileID: 546266803268347175}
+  m_PrefabAsset: {fileID: 0}
+--- !u!146 &546266801554370395 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 1784236668, guid: cec76b568170efd41ad1c59ca0fed18e,
     type: 3}
   m_PrefabInstance: {fileID: 546266803268347175}
   m_PrefabAsset: {fileID: 0}
