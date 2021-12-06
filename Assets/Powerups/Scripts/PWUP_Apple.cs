@@ -10,8 +10,6 @@ public class PWUP_Apple : PWUP_Script
 
     [SerializeField] private float effectTime = 10f;
 
-    [SerializeField] private Text counterText;
-
     private bool isTimerActive = false;
 
     private float remainingTime = 0;
@@ -27,7 +25,7 @@ public class PWUP_Apple : PWUP_Script
 
         this.player = player;
 
-        ArcadeKart kart = player.GetComponent<ArcadeKart>();
+        MovementKart kart = player.GetComponent<MovementKart>();
         Rigidbody rigidbody = player.GetComponent<Rigidbody>();
 
         kart.baseStats.Acceleration *= accelerationBoost;
@@ -47,7 +45,6 @@ public class PWUP_Apple : PWUP_Script
         if (isTimerActive)
         {
             remainingTime -= Time.deltaTime;
-            counterText.text = $"Counter: {remainingTime}";
 
             if (remainingTime <= 0)
                 TimerEnded();
@@ -58,11 +55,9 @@ public class PWUP_Apple : PWUP_Script
     {
         isTimerActive = false;
 
-        ArcadeKart kart = player.GetComponent<ArcadeKart>();
+        MovementKart kart = player.GetComponent<MovementKart>();
         kart.baseStats.Acceleration /= accelerationBoost;
         kart.baseStats.TopSpeed /= topSpeedBoost;
-
-        counterText.text = "Counter: 0";
 
         RemoveItself();
     }
