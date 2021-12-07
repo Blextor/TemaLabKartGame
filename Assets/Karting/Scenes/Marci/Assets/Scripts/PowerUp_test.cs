@@ -30,6 +30,7 @@ public class PowerUp_test : PWUP_Script
 
         kart.baseStats.Acceleration *= accelerationBoost;
         kart.baseStats.TopSpeed *= topSpeedBoost;
+        rigidbody.mass *= 2;
         rigidbody.velocity *= velocityBoost;
 
         isTimerActive = true;

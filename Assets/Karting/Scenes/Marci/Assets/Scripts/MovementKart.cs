@@ -39,9 +39,6 @@ using UnityEngine.VFX;
             [Tooltip("How tightly the kart can turn left or right.")]
             public float Steer;
 
-            [Tooltip("Additional gravity for when the kart is in the air.")]
-            public float AddedGravity;
-
         }
 
         public Rigidbody Rigidbody { get; private set; }
@@ -60,7 +57,6 @@ using UnityEngine.VFX;
             Steer = 5f,
             CoastingDrag = 4f,
             Grip = .95f,
-            AddedGravity = 1f,
         };
 
         [Header("Vehicle Visual")]
@@ -130,8 +126,6 @@ using UnityEngine.VFX;
         float m_PreviousGroundPercent = 1.0f;
         readonly List<(GameObject trailRoot, WheelCollider wheel, TrailRenderer trail)> m_DriftTrailInstances = new List<(GameObject, WheelCollider, TrailRenderer)>();
 
-        // can the kart move?
-        bool m_CanMove = true;
         MovementKart.Stats m_FinalStats;
 
         Quaternion m_LastValidRotation;
@@ -140,7 +134,6 @@ using UnityEngine.VFX;
         bool m_HasCollision;
         bool m_InAir = false;
 
-        public void SetCanMove(bool move) => m_CanMove = move;
         public float GetMaxSpeed() => Mathf.Max(m_FinalStats.TopSpeed, m_FinalStats.ReverseSpeed);
 
         private void ActivateDriftVFX(bool active)
@@ -160,25 +153,11 @@ using UnityEngine.VFX;
             }
         }
 
-        void UpdateSuspensionParams(WheelCollider wheel)
-        {
-            wheel.suspensionDistance = SuspensionHeight;
-            wheel.center = new Vector3(0.0f, WheelsPositionVerticalOffset, 0.0f);
-            JointSpring spring = wheel.suspensionSpring;
-            spring.spring = SuspensionSpring;
-            spring.damper = SuspensionDamp;
-            wheel.suspensionSpring = spring;
-        }
 
         void Awake()
         {
             Rigidbody = GetComponent<Rigidbody>();
             m_Inputs = GetComponents<IInput>();
-
-            UpdateSuspensionParams(FrontLeftWheel);
-            UpdateSuspensionParams(FrontRightWheel);
-            UpdateSuspensionParams(RearLeftWheel);
-            UpdateSuspensionParams(RearRightWheel);
 
             m_CurrentGrip = baseStats.Grip;
 
@@ -202,10 +181,6 @@ using UnityEngine.VFX;
 
         void FixedUpdate()
         {
-            UpdateSuspensionParams(FrontLeftWheel);
-            UpdateSuspensionParams(FrontRightWheel);
-            UpdateSuspensionParams(RearLeftWheel);
-            UpdateSuspensionParams(RearRightWheel);
 
             GatherInputs();
 
@@ -214,7 +189,7 @@ using UnityEngine.VFX;
             m_FinalStats = baseStats;
 
             // clamp values in finalstats
-            m_FinalStats.Grip = Mathf.Clamp(m_FinalStats.Grip, 0, 1);
+           // m_FinalStats.Grip = Mathf.Clamp(m_FinalStats.Grip, 0, 1);
 
             // apply our physics properties
             Rigidbody.centerOfMass = transform.InverseTransformPoint(CenterOfMass.position);
@@ -234,11 +209,8 @@ using UnityEngine.VFX;
             AirPercent = 1 - GroundPercent;
 
             // apply vehicle physics
-            if (m_CanMove)
-            {
-                MoveVehicle(Input.Accelerate, Input.Brake, Input.TurnInput);
-            }
-            GroundAirbourne();
+
+            MoveVehicle(Input.Accelerate, Input.Brake, Input.TurnInput);
 
             m_PreviousGroundPercent = GroundPercent;
 
@@ -260,15 +232,6 @@ using UnityEngine.VFX;
         }
 
 
-        void GroundAirbourne()
-        {
-            // while in the air, fall faster
-            if (AirPercent >= 1)
-            {
-                Rigidbody.velocity += Physics.gravity * Time.fixedDeltaTime * m_FinalStats.AddedGravity;
-            }
-        }
-
         public void Reset()
         {
             Vector3 euler = transform.rotation.eulerAngles;
@@ -278,21 +241,15 @@ using UnityEngine.VFX;
 
         public float LocalSpeed()
         {
-            if (m_CanMove)
+
+            float dot = Vector3.Dot(transform.forward, Rigidbody.velocity);
+            if (Mathf.Abs(dot) > 0.1f)
             {
-                float dot = Vector3.Dot(transform.forward, Rigidbody.velocity);
-                if (Mathf.Abs(dot) > 0.1f)
-                {
-                    float speed = Rigidbody.velocity.magnitude;
-                    return dot < 0 ? -(speed / m_FinalStats.ReverseSpeed) : (speed / m_FinalStats.TopSpeed);
-                }
-                return 0f;
+                float speed = Rigidbody.velocity.magnitude;
+                return dot < 0 ? -(speed / m_FinalStats.ReverseSpeed) : (speed / m_FinalStats.TopSpeed);
             }
-            else
-            {
-                // use this value to play kart sound when it is waiting the race start countdown.
-                return Input.Accelerate ? 1.0f : 0.0f;
-            }
+            return 0f;
+
         }
 
         void OnCollisionEnter(Collision collision) => m_HasCollision = true;
@@ -453,7 +410,7 @@ using UnityEngine.VFX;
                 }
 
                 // rotate our velocity based on current steer value
-                Rigidbody.velocity = Quaternion.AngleAxis(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * Time.fixedDeltaTime, transform.up) * Rigidbody.velocity;
+                //Rigidbody.velocity = Quaternion.AngleAxis(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * Time.fixedDeltaTime, transform.up) * Rigidbody.velocity;
             }
             else
             {
