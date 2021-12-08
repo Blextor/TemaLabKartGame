@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2789939375790819975
+--- !u!1 &7586984696163959456
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2791685572688286997}
-  - component: {fileID: 2794351074033438687}
-  - component: {fileID: 2801984392085194131}
-  - component: {fileID: 5478323964911043933}
-  - component: {fileID: 2801436770000147572}
+  - component: {fileID: 7592230509670099590}
+  - component: {fileID: 7582469889468336366}
+  - component: {fileID: 7574680458389468906}
+  - component: {fileID: 7587445856652805074}
+  - component: {fileID: 7587445856652805075}
+  - component: {fileID: 2395634606384856128}
   m_Layer: 0
-  m_Name: apple
+  m_Name: PWUP_Prefab_Cherry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2791685572688286997
+--- !u!4 &7592230509670099590
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2789939375790819975}
-  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
-  m_LocalPosition: {x: -25.105, y: 0.76, z: -47.838}
-  m_LocalScale: {x: 50, y: 50, z: 50}
+  m_GameObject: {fileID: 7586984696163959456}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: -25.119, y: 0.469, z: -47.583}
+  m_LocalScale: {x: 60, y: 60, z: 60}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
---- !u!33 &2794351074033438687
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &7582469889468336366
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2789939375790819975}
-  m_Mesh: {fileID: 4300016, guid: 3f4d2118f6a772542a1635ef5bfa6982, type: 3}
---- !u!23 &2801984392085194131
+  m_GameObject: {fileID: 7586984696163959456}
+  m_Mesh: {fileID: 4300012, guid: 3f4d2118f6a772542a1635ef5bfa6982, type: 3}
+--- !u!23 &7574680458389468906
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2789939375790819975}
+  m_GameObject: {fileID: 7586984696163959456}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -83,28 +84,63 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &5478323964911043933
+--- !u!135 &7587445856652805074
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2789939375790819975}
+  m_GameObject: {fileID: 7586984696163959456}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.013
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2801436770000147572
+  m_Radius: 0.011
+  m_Center: {x: -0.00038395217, y: -0.00029923808, z: 0}
+--- !u!114 &7587445856652805075
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2789939375790819975}
+  m_GameObject: {fileID: 7586984696163959456}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a6cdc95ef67c6d45995a01424feb9c6, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f8ccb8b294d42743ae0c755cd30bf2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2395634606384856128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7586984696163959456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb90679940aa4f70846b5eeaf547397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boostStats:
+    modifiers:
+      TopSpeed: 1
+      Acceleration: 10
+      ReverseSpeed: 0
+      ReverseAcceleration: 0
+      AccelerationCurve: 0
+      Braking: 0
+      CoastingDrag: 0
+      Grip: 0
+      Steer: 0
+      AddedGravity: 0
+    PowerUpID: 
+    ElapsedTime: 0
+    MaxTime: 5
+  cooldown: 5
+  disableGameObjectWhenActivated: 0
+  onPowerupActivated:
+    m_PersistentCalls:
+      m_Calls: []
+  onPowerupFinishCooldown:
+    m_PersistentCalls:
+      m_Calls: []
