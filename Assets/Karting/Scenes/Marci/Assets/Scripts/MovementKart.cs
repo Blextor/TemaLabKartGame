@@ -407,6 +407,7 @@ using UnityEngine.VFX;
                         m_CurrentGrip = m_FinalStats.Grip;
                     }
 
+                ActivateDriftVFX(true);
                 }
 
                 // rotate our velocity based on current steer value
