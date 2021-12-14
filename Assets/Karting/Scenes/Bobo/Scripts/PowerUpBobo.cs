@@ -21,10 +21,11 @@ public class PowerUpBobo : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        
         Debug.Log("Trigger");
-        DeActivate();
         HelloWorldPlayer script = other.gameObject.GetComponent<HelloWorldPlayer>();
         script.GetExtraPoint(GetComponent<NetworkObject>().NetworkObjectId);
+        
     }
     public void DeActivate()
     {
