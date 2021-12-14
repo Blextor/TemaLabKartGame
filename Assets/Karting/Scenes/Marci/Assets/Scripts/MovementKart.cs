@@ -29,10 +29,6 @@ public class MovementKart : MonoBehaviour
         [Tooltip("How quickly the kart slows down when the brake is applied.")]
         public float Braking;
 
-        [Range(0.0f, 1.0f)]
-        [Tooltip("The amount of side-to-side friction.")]
-        public float Grip;
-
         [Tooltip("How tightly the kart can turn left or right.")]
         public float Steer;
 
@@ -51,32 +47,15 @@ public class MovementKart : MonoBehaviour
         ReverseAcceleration = 5f,
         ReverseSpeed = 5f,
         Steer = 5f,
-        Grip = .95f,
     };
 
     [Header("Vehicle Physics")]
     [Tooltip("The transform that determines the position of the kart's mass.")]
     public Transform CenterOfMass;
 
-    [Header("Drifting")]
-    [Range(0.01f, 1.0f), Tooltip("The grip value when drifting.")]
-    public float DriftGrip = 0.4f;
-    [Range(0.0f, 10.0f), Tooltip("Additional steer when the kart is drifting.")]
-    public float DriftAdditionalSteer = 5.0f;
-    [Range(1.0f, 30.0f), Tooltip("The higher the angle, the easier it is to regain full grip.")]
-    public float MinAngleToFinishDrift = 10.0f;
-    [Range(0.01f, 0.99f), Tooltip("Mininum speed percentage to switch back to full grip.")]
-    public float MinSpeedPercentToFinishDrift = 0.5f;
-    [Range(1.0f, 20.0f), Tooltip("The higher the value, the easier it is to control the drift steering.")]
-    public float DriftControl = 10.0f;
-    [Range(0.0f, 20.0f), Tooltip("The lower the value, the longer the drift will last without trying to control it by steering.")]
-    public float DriftDampening = 10.0f;
-
     [Header("VFX")]
     [Tooltip("VFX that will be placed on the wheels when drifting.")]
     public GameObject DriftTrailPrefab;
-    [Range(-0.1f, 0.1f), Tooltip("Vertical to move the trails up or down and ensure they are above the ground.")]
-    public float DriftTrailVerticalOffset;
 
     [Header("Physical Wheels")]
     [Tooltip("The physical representations of the Kart's wheels.")]
@@ -97,8 +76,6 @@ public class MovementKart : MonoBehaviour
 
     MovementKart.Stats m_FinalStats;
 
-    public float GetMaxSpeed() => Mathf.Max(m_FinalStats.TopSpeed, m_FinalStats.ReverseSpeed);
-
     private void ActivateDriftVFX(bool active)
     {
 
@@ -111,7 +88,7 @@ public class MovementKart : MonoBehaviour
 
         foreach (var trail in m_DriftTrailInstances)
         {
-            trail.trailRoot.transform.position = trail.wheel.transform.position - (trail.wheel.radius * Vector3.up) + (DriftTrailVerticalOffset * Vector3.up);
+            trail.trailRoot.transform.position = trail.wheel.transform.position - (trail.wheel.radius * Vector3.up);
             trail.trailRoot.transform.rotation = transform.rotation;
         }
     }

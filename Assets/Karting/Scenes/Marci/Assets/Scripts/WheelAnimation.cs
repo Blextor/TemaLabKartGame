@@ -11,24 +11,14 @@ using UnityEngine;
             [Tooltip("A reference to the WheelCollider of the wheel.")]
             public WheelCollider wheelCollider;
 
-            Quaternion m_SteerlessLocalRotation;
 
-            public void Setup() => m_SteerlessLocalRotation = wheelTransform.localRotation;
-
-            public void StoreDefaultRotation() => m_SteerlessLocalRotation = wheelTransform.localRotation;
-            public void SetToDefaultRotation() => wheelTransform.localRotation = m_SteerlessLocalRotation;
         }
 
-        [Tooltip("What kart do we want to listen to?")]
-        public MovementKart kartController;
-
-        [Space]
-        [Tooltip("The damping for the appearance of steering compared to the input.  The higher the number the less damping.")]
-        public float steeringAnimationDamping = 10f;
 
         [Space]
         [Tooltip("The maximum angle in degrees that the front wheels can be turned away from their default positions, when the Steering input is either 1 or -1.")]
         public float maxSteeringAngle;
+
         [Tooltip("Information referring to the front left wheel of the kart.")]
         public Wheel frontLeftWheel;
         [Tooltip("Information referring to the front right wheel of the kart.")]
@@ -41,20 +31,12 @@ using UnityEngine;
 
         float m_SmoothedSteeringInput;
 
-        void Start()
-        {
-            frontLeftWheel.Setup();
-            frontRightWheel.Setup();
-            rearLeftWheel.Setup();
-            rearRightWheel.Setup();
-        }
-
         void FixedUpdate()
         {
-        float m_TurnInput = Input.GetAxis("Horizontal");
 
+        float m_TurnInput = Input.GetAxis("Horizontal");
         m_SmoothedSteeringInput = Mathf.MoveTowards(m_SmoothedSteeringInput, m_TurnInput,
-                steeringAnimationDamping * Time.deltaTime);
+                10.0f * Time.deltaTime);
 
         // Steer front wheels
         float rotationAngle = m_SmoothedSteeringInput * maxSteeringAngle;
