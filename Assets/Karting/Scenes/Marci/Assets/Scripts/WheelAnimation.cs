@@ -56,9 +56,6 @@ using UnityEngine;
         m_SmoothedSteeringInput = Mathf.MoveTowards(m_SmoothedSteeringInput, m_TurnInput,
                 steeringAnimationDamping * Time.deltaTime);
 
-        //m_SmoothedSteeringInput = Mathf.MoveTowards(m_SmoothedSteeringInput, kartController.Input.TurnInput,
-        //   steeringAnimationDamping * Time.deltaTime);
-
         // Steer front wheels
         float rotationAngle = m_SmoothedSteeringInput * maxSteeringAngle;
 

@@ -29,9 +29,6 @@ public class MovementKart : MonoBehaviour
         [Tooltip("How quickly the kart slows down when the brake is applied.")]
         public float Braking;
 
-        [Tooltip("How quickly the kart will reach a full stop when no inputs are made.")]
-        public float CoastingDrag;
-
         [Range(0.0f, 1.0f)]
         [Tooltip("The amount of side-to-side friction.")]
         public float Grip;
@@ -54,7 +51,6 @@ public class MovementKart : MonoBehaviour
         ReverseAcceleration = 5f,
         ReverseSpeed = 5f,
         Steer = 5f,
-        CoastingDrag = 4f,
         Grip = .95f,
     };
 
@@ -92,25 +88,14 @@ public class MovementKart : MonoBehaviour
     [Tooltip("Which layers the wheels will detect.")]
     public LayerMask GroundLayers = Physics.DefaultRaycastLayers;
 
-    const float k_NullInput = 0.01f;
-    const float k_NullSpeed = 0.01f;
     Vector3 m_VerticalReference = Vector3.up;
 
     // Drift params
     public bool WantsToDrift { get; private set; } = false;
     public bool IsDrifting { get; private set; } = false;
-    float m_CurrentGrip = 1.0f;
-    float m_DriftTurningPower = 0.0f;
-    float m_PreviousGroundPercent = 1.0f;
     readonly List<(GameObject trailRoot, WheelCollider wheel, TrailRenderer trail)> m_DriftTrailInstances = new List<(GameObject, WheelCollider, TrailRenderer)>();
 
     MovementKart.Stats m_FinalStats;
-
-    Quaternion m_LastValidRotation;
-    Vector3 m_LastValidPosition;
-    Vector3 m_LastCollisionNormal;
-    bool m_HasCollision;
-    bool m_InAir = false;
 
     public float GetMaxSpeed() => Mathf.Max(m_FinalStats.TopSpeed, m_FinalStats.ReverseSpeed);
 
@@ -136,8 +121,6 @@ public class MovementKart : MonoBehaviour
     {
         Rigidbody = GetComponent<Rigidbody>();
 
-        m_CurrentGrip = baseStats.Grip;
-
         if (DriftTrailPrefab != null)
         {
             AddTrailToWheel(FrontLeftWheel);
@@ -162,9 +145,7 @@ public class MovementKart : MonoBehaviour
         GetInput();
 
         m_FinalStats = baseStats;
-        m_FinalStats.Grip = Mathf.Clamp(m_FinalStats.Grip, 0, 1);
 
-        // apply our physics properties
         Rigidbody.centerOfMass = transform.InverseTransformPoint(CenterOfMass.position);
 
         int groundedCount = 0;
@@ -177,15 +158,10 @@ public class MovementKart : MonoBehaviour
         if (RearRightWheel.isGrounded && RearRightWheel.GetGroundHit(out hit))
             groundedCount++;
 
-        // calculate how grounded and airborne we are
         GroundPercent = (float)groundedCount / 4.0f;
         AirPercent = 1 - GroundPercent;
 
-        // apply vehicle physics
-
         MoveVehicle(m_AccelerateInput, m_BreakInput, m_TurnInput);
-
-        m_PreviousGroundPercent = GroundPercent;
 
         UpdateDriftVFXOrientation();
     }
@@ -200,10 +176,8 @@ public class MovementKart : MonoBehaviour
         m_BreakInput = Input.GetButton("Brake");
         m_TurnInput = Input.GetAxis("Horizontal");
 
-        WantsToDrift =  m_BreakInput && Vector3.Dot(Rigidbody.velocity, transform.forward) > 0.0f;
-
+        WantsToDrift =  Vector3.Dot(Rigidbody.velocity, transform.forward) > 0.0f;
     }
-
 
     public void Reset()
     {
@@ -212,47 +186,16 @@ public class MovementKart : MonoBehaviour
         transform.rotation = Quaternion.Euler(euler);
     }
 
-    public float LocalSpeed()
-    {
-
-        float dot = Vector3.Dot(transform.forward, Rigidbody.velocity);
-        if (Mathf.Abs(dot) > 0.1f)
-        {
-            float speed = Rigidbody.velocity.magnitude;
-            return dot < 0 ? -(speed / m_FinalStats.ReverseSpeed) : (speed / m_FinalStats.TopSpeed);
-        }
-        return 0f;
-
-    }
-
-    void OnCollisionEnter(Collision collision) => m_HasCollision = true;
-    void OnCollisionExit(Collision collision) => m_HasCollision = false;
-
-    void OnCollisionStay(Collision collision)
-    {
-        m_HasCollision = true;
-        m_LastCollisionNormal = Vector3.zero;
-        float dot = -1.0f;
-
-        foreach (var contact in collision.contacts)
-        {
-            if (Vector3.Dot(contact.normal, Vector3.up) > dot)
-                m_LastCollisionNormal = contact.normal;
-        }
-    }
-
     void MoveVehicle(bool accelerate, bool brake, float turnInput)
     {
         float accelInput = (accelerate ? 1.0f : 0.0f) - (brake ? 1.0f : 0.0f);
 
-        // manual acceleration curve coefficient scalar
         float accelerationCurveCoeff = 5;
         Vector3 localVel = transform.InverseTransformVector(Rigidbody.velocity);
 
         bool accelDirectionIsFwd = accelInput >= 0;
         bool localVelDirectionIsFwd = localVel.z >= 0;
 
-        // use the max speed for the direction we are going--forward or reverse.
         float maxSpeed = localVelDirectionIsFwd ? m_FinalStats.TopSpeed : m_FinalStats.ReverseSpeed;
         float accelPower = accelDirectionIsFwd ? m_FinalStats.Acceleration : m_FinalStats.ReverseAcceleration;
 
@@ -263,127 +206,54 @@ public class MovementKart : MonoBehaviour
 
         bool isBraking = (localVelDirectionIsFwd && brake) || (!localVelDirectionIsFwd && accelerate);
 
-        // if we are braking (moving reverse to where we are going)
-        // use the braking accleration instead
         float finalAccelPower = isBraking ? m_FinalStats.Braking : accelPower;
-
         float finalAcceleration = finalAccelPower * accelRamp;
 
-        // apply inputs to forward/backward
-        float turningPower = IsDrifting ? m_DriftTurningPower : turnInput * m_FinalStats.Steer;
+        float turningPower =  turnInput * m_FinalStats.Steer;
 
         Quaternion turnAngle = Quaternion.AngleAxis(turningPower, transform.up);
         Vector3 fwd = turnAngle * transform.forward;
-        Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f);
+        Vector3 movement = fwd * accelInput * finalAcceleration * ((GroundPercent > 0.0f) ? 1.0f : 0.0f);
 
-        // forward movement
         bool wasOverMaxSpeed = currentSpeed >= maxSpeed;
 
-        // if over max speed, cannot accelerate faster.
         if (wasOverMaxSpeed && !isBraking)
             movement *= 0.0f;
 
         Vector3 newVelocity = Rigidbody.velocity + movement * Time.fixedDeltaTime;
         newVelocity.y = Rigidbody.velocity.y;
 
-        //  clamp max speed if we are on ground
-        if (GroundPercent > 0.0f && !wasOverMaxSpeed)
-        {
-            newVelocity = Vector3.ClampMagnitude(newVelocity, maxSpeed);
-        }
-
-        // coasting is when we aren't touching accelerate
-        if (Mathf.Abs(accelInput) < k_NullInput && GroundPercent > 0.0f)
-        {
-            newVelocity = Vector3.MoveTowards(newVelocity, new Vector3(0, Rigidbody.velocity.y, 0), Time.fixedDeltaTime * m_FinalStats.CoastingDrag);
-        }
-
         Rigidbody.velocity = newVelocity;
 
         // Drift
         if (GroundPercent > 0.0f)
         {
-            if (m_InAir)
-            {
-                m_InAir = false;
-            }
 
-            // manual angular velocity coefficient
             float angularVelocitySteering = 0.4f;
-            float angularVelocitySmoothSpeed = 20f;
-
-            // turning is reversed if we're going in reverse and pressing reverse
-            if (!localVelDirectionIsFwd && !accelDirectionIsFwd)
-                angularVelocitySteering *= -1.0f;
+            float angularVelocitySmoothSpeed = 40f;
 
             var angularVel = Rigidbody.angularVelocity;
-
-            // move the Y angular velocity towards our target
             angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.fixedDeltaTime * angularVelocitySmoothSpeed);
-
-            // apply the angular velocity
             Rigidbody.angularVelocity = angularVel;
 
-            // If the karts lands with a forward not in the velocity direction, we start the drift
-            if (GroundPercent >= 0.0f && m_PreviousGroundPercent < 0.1f)
-            {
-                Vector3 flattenVelocity = Vector3.ProjectOnPlane(Rigidbody.velocity, m_VerticalReference).normalized;
-                if (Vector3.Dot(flattenVelocity, transform.forward * Mathf.Sign(accelInput)) < Mathf.Cos(MinAngleToFinishDrift * Mathf.Deg2Rad))
-                {
-                    IsDrifting = true;
-                    m_CurrentGrip = DriftGrip;
-                    m_DriftTurningPower = 0.0f;
-                }
-            }
-
-            // Drift Management
             if (!IsDrifting)
             {
-                if ((WantsToDrift || isBraking) && currentSpeed > maxSpeed * MinSpeedPercentToFinishDrift)
+                if (WantsToDrift)
                 {
                     IsDrifting = true;
-                    m_DriftTurningPower = turningPower + (Mathf.Sign(turningPower) * DriftAdditionalSteer);
-                    m_CurrentGrip = DriftGrip;
-
                     ActivateDriftVFX(true);
                 }
             }
 
             if (IsDrifting)
             {
-                float turnInputAbs = Mathf.Abs(turnInput);
-                if (turnInputAbs < k_NullInput)
-                    m_DriftTurningPower = Mathf.MoveTowards(m_DriftTurningPower, 0.0f, Mathf.Clamp01(DriftDampening * Time.fixedDeltaTime));
-
-                // Update the turning power based on input
-                float driftMaxSteerValue = m_FinalStats.Steer + DriftAdditionalSteer;
-                m_DriftTurningPower = Mathf.Clamp(m_DriftTurningPower + (turnInput * Mathf.Clamp01(DriftControl * Time.fixedDeltaTime)), -driftMaxSteerValue, driftMaxSteerValue);
-
-                bool facingVelocity = Vector3.Dot(Rigidbody.velocity.normalized, transform.forward * Mathf.Sign(accelInput)) > Mathf.Cos(MinAngleToFinishDrift * Mathf.Deg2Rad);
-
-                bool canEndDrift = true;
-                if (isBraking)
-                    canEndDrift = false;
-                else if (!facingVelocity)
-                    canEndDrift = false;
-                else if (turnInputAbs >= k_NullInput && currentSpeed > maxSpeed * MinSpeedPercentToFinishDrift)
-                    canEndDrift = false;
-
-                if (canEndDrift || currentSpeed < k_NullSpeed)
+                if (Vector3.Angle(Rigidbody.velocity, transform.forward) < 15)
                 {
-                    // No Input, and car aligned with speed direction => Stop the drift
                     IsDrifting = false;
-                    m_CurrentGrip = m_FinalStats.Grip;
                 }
             }
         }
-        else
-        {
-            m_InAir = true;
-        }
 
-
-        // Airborne / Half on ground management
         if (GroundPercent < 0.7f)
         {
             Rigidbody.angularVelocity = new Vector3(0.0f, Rigidbody.angularVelocity.y * 0.98f, 0.0f);
@@ -391,9 +261,9 @@ public class MovementKart : MonoBehaviour
             finalOrientationDirection.Normalize();
             if (finalOrientationDirection.sqrMagnitude > 0.0f)
             {
-                Rigidbody.MoveRotation(Quaternion.Lerp(Rigidbody.rotation, Quaternion.LookRotation(finalOrientationDirection, m_VerticalReference), Mathf.Clamp01(5 * Time.fixedDeltaTime)));
+                Rigidbody.MoveRotation(Quaternion.Lerp(Rigidbody.rotation, Quaternion.LookRotation(finalOrientationDirection, m_VerticalReference), Mathf.Clamp01(0.1f * Time.fixedDeltaTime)));
             }
         }
-        ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);
+        ActivateDriftVFX(IsDrifting && accelDirectionIsFwd);
     }
 }
