@@ -1065,7 +1065,6 @@ GameObject:
   - component: {fileID: 6267352897708404416}
   - component: {fileID: 6267352897708404417}
   - component: {fileID: 1651895864}
-  - component: {fileID: 7187714452596448368}
   - component: {fileID: 3292926533399967853}
   - component: {fileID: 7972725367402991779}
   m_Layer: 0
@@ -1121,21 +1120,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.3, y: 0.6, z: 2.8848343}
   m_Center: {x: 0, y: 0.3, z: -0.057582855}
---- !u!114 &7187714452596448368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6267352897708404419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c973bba1e35c83648b25f9c53250472b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TurnInputName: Horizontal
-  AccelerateButtonName: Accelerate
-  BrakeButtonName: Brake
 --- !u!114 &3292926533399967853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1164,7 +1148,6 @@ MonoBehaviour:
   - {fileID: 6267352898808600375}
   - {fileID: 6267352898188068887}
   CenterOfMass: {fileID: 6267352898217364276}
-  AirborneReorientationCoefficient: 3
   DriftGrip: 0.4
   DriftAdditionalSteer: 10
   MinAngleToFinishDrift: 10
@@ -1174,10 +1157,6 @@ MonoBehaviour:
   DriftTrailPrefab: {fileID: 4162818498552360563, guid: b2760c993f819b44e840bfe1a2611ccc,
     type: 3}
   DriftTrailVerticalOffset: 0
-  SuspensionHeight: 0.02
-  SuspensionSpring: 70000
-  SuspensionDamp: 500
-  WheelsPositionVerticalOffset: 0
   FrontLeftWheel: {fileID: 942790692}
   FrontRightWheel: {fileID: 589798302}
   RearLeftWheel: {fileID: 1784236668}
