@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 937583477852022754}
   m_Layer: 0
   m_Name: PWUP_Prefab_Peach
-  m_TagString: Untagged
+  m_TagString: Powerup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,3 +108,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 039c43286619035408a97830c59dbee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  effectTime: 10
+  massMultiplier: 20

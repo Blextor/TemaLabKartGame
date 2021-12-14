@@ -48,9 +48,8 @@ public abstract class PWUP_Script : MonoBehaviour
      */
     public void RemoveItself()
     {
+        GameObject.Find("PowerupGenerator")?.GetComponent<GeneratePowerups>()?.RemovePowerup(gameObject);
         Destroy(gameObject);
-
-        // TODO remove from server
     }
 
     public void Hide()
