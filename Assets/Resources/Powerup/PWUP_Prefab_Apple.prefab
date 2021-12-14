@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2801436770000147572}
   m_Layer: 0
   m_Name: PWUP_Prefab_Apple
-  m_TagString: Untagged
+  m_TagString: Powerup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,3 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a6cdc95ef67c6d45995a01424feb9c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  accelerationBoost: 1.2
+  topSpeedBoost: 1.2
+  velocityBoost: 1.2
+  effectTime: 10
