@@ -31,6 +31,14 @@ namespace PathCreation.Examples {
         public List<GameObject> ramps;
         private void Awake()
         {
+            Hapci();
+
+        }
+
+
+
+        public void Hapci(Vector3[] gotCirclePoints = null, Vector3[] gotRoadPoints = null)
+        {
             for (int i = 0; i < ramps.Count; i++)
             {
                 DestroyImmediate(ramps[i]);
@@ -49,6 +57,7 @@ namespace PathCreation.Examples {
              }
            
 
+
             int layerMask = 1 << 7; 
             for(int i = 0; i < numberOfPoints; i++)
             {
@@ -60,8 +69,22 @@ namespace PathCreation.Examples {
                 } 
             }
             
-             
-            
+            if (gotCirclePoints != null)
+            {
+                for (int i=0; i < gotCirclePoints.Length; i++)
+                {
+                    CirclePoints[i] = gotCirclePoints[i];
+                }
+            }
+
+            if (gotRoadPoints != null)
+            {
+                for (int i = 0; i < gotRoadPoints.Length; i++)
+                {
+                    RoadPoints[i] = gotRoadPoints[i];
+                }
+            }
+
             GeneratePath(RoadPoints, true);
             PathUpdated();
 
@@ -79,8 +102,8 @@ namespace PathCreation.Examples {
             Vector3 pos = path.GetPointAtDistance(0.0f);
             pos.y += 0.1f;
             startLine.transform.position = pos;
-
         }
+
         void Start()
         {
             ramp.transform.localScale =new Vector3(18,7,10);

@@ -15,8 +15,13 @@ public class GeneratePowerups : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Hapci();
+    }
+
+    public void Hapci()
+    {
         List<Vector3> randomMapPoints = GetRandomPoints(powerupsOnMapCount);
-        
+
         for (int i = 0; i < powerupsOnMapCount; ++i)
         {
             GeneratePowerup(randomMapPoints[i]);

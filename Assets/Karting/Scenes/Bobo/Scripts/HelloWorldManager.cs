@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Unity.Netcode.Transports.UNET;
 using System.Threading;
 using System.Collections.Generic;
+using PathCreation.Examples;
 
 public class HelloWorldManager : NetworkBehaviour
 {
@@ -19,7 +20,7 @@ public class HelloWorldManager : NetworkBehaviour
     public NetworkVariable<bool> ActiveExtraPointNet = new NetworkVariable<bool>();
     public bool activeExtraPoint;
     public GameObject ExtraPointGameObject;
-
+    
 
     //private
 
@@ -124,16 +125,46 @@ public class HelloWorldManager : NetworkBehaviour
 
     static void SubmitNewPosition()
     {
-        if (GUILayout.Button(NetworkManager.Singleton.IsServer ? "Move" : "Request Position Change"))
+        if (NetworkManager.Singleton.IsServer)
         {
-            var playerObject = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
-            var player = playerObject.GetComponent<HelloWorldPlayer>();
-            player.Move();
+            if (GUILayout.Button("Start"))
+            {
+                //var playerObject = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
+                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                GameObject startLine = GameObject.FindGameObjectWithTag("StartLine");
+                Vector3 trans = startLine.transform.position;
+                float dis = players.Length * -3.0f;
+                Debug.Log("Talán itt");
+                RoadMeshCreator script = GameObject.FindGameObjectWithTag("RoadCreator").GetComponent<RoadMeshCreator>();
+                Vector3[] cpoints = script.CirclePoints;
+                Vector3[] rpoints = script.RoadPoints;
+                List<GameObject> ugr =  GameObject.FindGameObjectWithTag("RoadCreator").GetComponent<RoadMeshCreator>().ramps;
+                Vector3[] ugratok_pos = new Vector3[ugr.Count];
+                Quaternion[] ugratok_qua = new Quaternion[ugr.Count];
+                for (int i=0; i < ugr.Count; i++)
+                {
+                    ugratok_pos[i] = ugr[i].transform.position;
+                    ugratok_qua[i] = ugr[i].transform.rotation;
+                }
+                for (int i = 0; i < players.Length; i++)
+                {
+                    Debug.Log("Talán bitt");
+                    Vector3 pos = trans + startLine.transform.right * dis;
+                    dis += 6f;
+                    Debug.Log("Player: " + i + " " + players.Length);
+                    players[i].GetComponent<KartPlayer>().GetReadyClientRpc(pos.x, pos.y + 2, pos.z, startLine.transform.forward);
+                    Debug.Log("Player: " + i);
+                    players[i].GetComponent<KartPlayer>().UpdateMapClientRpc(cpoints, rpoints, ugratok_pos, ugratok_qua);
+                    Debug.Log("Player: " + i);
+                }
+                Debug.Log("Talán itt");
+                //var player = playerObject.GetComponent<HelloWorldPlayer>();
+                //player.Move();
+            }
         }
-        
     }
 
-    /*
+    
     [ServerRpc]
     private void SpawnExtrapointServerRpc(ulong netID)
     {
@@ -151,12 +182,10 @@ public class HelloWorldManager : NetworkBehaviour
         Debug.Log("Sikerült letenni egy Orb-ot");
         NetworkObject netObj = NetworkManager.SpawnManager.SpawnedObjects[itemNetID];
 
-
-
-
-
     }
-    */
+
+
+
 
     public void Update()
     {
@@ -172,11 +201,27 @@ public class HelloWorldManager : NetworkBehaviour
         }
 
 
-        /*if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             Debug.Log("M pressed");
             SpawnExtrapointServerRpc(NetworkManager.Singleton.LocalClientId);
-        }*/
+        }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            //Vector3[] alma = new Vector3[20], korte = new Vector3[20];
+            RoadMeshCreator script = GameObject.FindGameObjectWithTag("RoadCreator").GetComponent<RoadMeshCreator>();
+            Vector3[] cpoints = script.CirclePoints, rpoints = script.RoadPoints;
+            for (int i=0; i < players.Length; i++)
+            {
+                //if (players[i].GetComponent<NetworkObject>().NetworkObjectId != this.gameObject.GetComponent<NetworkObject>().NetworkObjectId)
+                //{
+                    
+                //players[i].GetComponent<KartPlayer>().UpdateMapClientRpc(cpoints, rpoints);
+                //}
+            }
+        }
 
         //if (!activeExtraPoint)
           //  ExtraPointGameObject.GetComponent<PowerUpBobo>().DeActivate();

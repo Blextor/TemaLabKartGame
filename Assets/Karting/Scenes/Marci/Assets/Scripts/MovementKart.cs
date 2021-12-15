@@ -34,6 +34,8 @@ public class MovementKart : MonoBehaviour
 
     }
 
+    public KartPlayer kartPlayerSrcipt;
+
     public Rigidbody Rigidbody { get; private set; }
     public float AirPercent { get; private set; }
     public float GroundPercent { get; private set; }
@@ -149,11 +151,26 @@ public class MovementKart : MonoBehaviour
 
     public void GetInput()
     {
+        /*
         m_AccelerateInput = Input.GetButton("Accelerate");
         m_BreakInput = Input.GetButton("Brake");
+        */
+
         m_TurnInput = Input.GetAxis("Horizontal");
 
+        //if (kartPlayerSrcipt.)
+        m_AccelerateInput = kartPlayerSrcipt.BtnW.Value;
+        m_BreakInput = kartPlayerSrcipt.BtnS.Value;
+        m_TurnInput = 0f;
+        if (kartPlayerSrcipt.BtnD.Value)
+            m_TurnInput++;
+        if (kartPlayerSrcipt.BtnA.Value)
+            m_TurnInput--;
+
+        //if (kartPlayerSrcipt.)
+
         WantsToDrift =  Vector3.Dot(Rigidbody.velocity, transform.forward) > 0.0f;
+
     }
 
     public void Reset()

@@ -17,13 +17,19 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Karting/Scenes/Bobo/Final/Scene/Hm.unity
+    guid: 26f32a15e430f46479f90498f8190558
   - enabled: 0
     path: Assets/Karting/Scenes/Bobo/Scenes/SampleScene.unity
     guid: fd968b166ba9ce144bf3c102cb99b8fc
   - enabled: 0
     path: Assets/Karting/Scenes/Marci/Marci.unity
     guid: 083cddcf50e633043879f38ca0999f18
-  - enabled: 1
+  - enabled: 0
     path: Assets/Karting/Scenes/Tomi/CreateTrack.unity
     guid: a0b6a0ed7bcf3684382ee61ab3fec8f9
+  - enabled: 0
+    path: Assets/Karting/Scenes/Bobo/Scenes/Final.unity
+    guid: 41bf890af1ed1ea4bb02d7118ef27d18
   m_configObjects: {}

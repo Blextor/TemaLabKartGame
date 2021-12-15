@@ -31,6 +31,11 @@ namespace PathCreation.Examples
 
         void Start()
         {
+            Hapci();
+        }
+
+        public void Hapci()
+        {
             Vector3[] roadPoints = GameObject.Find("RoadCreator").GetComponent<RoadMeshCreator>().RoadPoints;
             VertexPath mainPath = GameObject.Find("RoadCreator").GetComponent<RoadMeshCreator>().pathCreator.path;
             float roadWidth = GameObject.Find("RoadCreator").GetComponent<RoadMeshCreator>().roadWidth;

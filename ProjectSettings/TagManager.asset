@@ -8,6 +8,14 @@ TagManager:
   - BoboPlayer
   - Checkpoint
   - Powerup
+  - MainCameraController
+  - StartLine
+  - RoadCreator
+  - SideA
+  - SideB
+  - InvSideA
+  - InvSideB
+  - PowGen
   layers:
   - Default
   - TransparentFX

@@ -31,33 +31,38 @@ namespace PathCreation.Examples
 
         void Awake()
         {
+            Hapci();
+        }
+
+        public void Hapci()
+        {
             Vector3[] roadPoints = GameObject.Find("RoadCreator").GetComponent<RoadMeshCreator>().RoadPoints;
             VertexPath mainPath = GameObject.Find("RoadCreator").GetComponent<RoadMeshCreator>().pathCreator.path;
             float roadWidth = GameObject.Find("RoadCreator").GetComponent<RoadMeshCreator>().roadWidth;
             List<Vector3> sidePoints = new List<Vector3>();
-            Vector3 lastAdded = mainPath.GetPoint(0) + mainPath.GetNormal(0)*roadWidth;
+            Vector3 lastAdded = mainPath.GetPoint(0) + mainPath.GetNormal(0) * roadWidth;
             sidePoints.Add(mainPath.GetPoint(0) + mainPath.GetNormal(0) * roadWidth);
-            
+
 
 
             for (int i = 1; i < mainPath.NumPoints - 1; i++)
             {
                 Vector3 pointToAdd = mainPath.GetPoint(i) + mainPath.GetNormal(i) * roadWidth;
                 bool add = false;
-                for(int j=0; j< roadPoints.Length; j++)
+                for (int j = 0; j < roadPoints.Length; j++)
                 {
-                    if (Vector3.Distance(mainPath.GetPoint(i), roadPoints[j]) < 40 && 
-                        Vector3.Distance(lastAdded,pointToAdd) > 4)
+                    if (Vector3.Distance(mainPath.GetPoint(i), roadPoints[j]) < 40 &&
+                        Vector3.Distance(lastAdded, pointToAdd) > 4)
                     {
                         add = true;
                     }
-                        
+
                 }
-                
-                
+
+
                 if (Vector3.Distance(pointToAdd, lastAdded) > 40 || add)
                 {
-                  
+
                     sidePoints.Add(pointToAdd);
                     lastAdded = pointToAdd;
                 }
