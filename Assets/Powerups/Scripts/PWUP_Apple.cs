@@ -1,4 +1,5 @@
 using KartGame.KartSystems;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,7 +52,13 @@ public class PWUP_Apple : PWUP_Script
         }
     }
 
-    private void TimerEnded()
+    public void OnTriggerEnter(Collider other)
+    {
+        KartPlayer script= other.gameObject.GetComponent<KartPlayer>();
+        script.GetPowerUp(this.gameObject,GetComponent<NetworkObject>().NetworkObjectId);
+    }
+
+        private void TimerEnded()
     {
         isTimerActive = false;
 

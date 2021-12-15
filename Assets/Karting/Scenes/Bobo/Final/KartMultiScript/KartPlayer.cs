@@ -84,7 +84,7 @@ public class KartPlayer : NetworkBehaviour
         //WASDNet.Insert()
     }
 
-    public void Move() 
+    public void Move()
     {
         if (NetworkManager.Singleton.IsServer)
         {
@@ -115,7 +115,7 @@ public class KartPlayer : NetworkBehaviour
         return new Vector3(Random.Range(-3f, 3f), 1f, Random.Range(-3f, 3f));
     }
 
-    
+
     [ServerRpc]
     void WBtnDownServerRpc(ServerRpcParams rpcParams = default)
     {
@@ -171,7 +171,7 @@ public class KartPlayer : NetworkBehaviour
         BtnD.Value = false;
         WASDSS[3] = false;
     }
-    
+
 
     [ServerRpc]
     void GetInputServerRpc(bool W, bool A, bool S, bool D, ServerRpcParams rpcParams = default)
@@ -240,6 +240,22 @@ public class KartPlayer : NetworkBehaviour
         Debug.Log("GetExtraPoint");
         if (NetworkManager.IsClient)
             DeSpawnExtrapointServerRpc(itemNetID);
+    }
+
+    public void GetPowerUp(GameObject type, ulong netID)
+    {
+        type.GetComponent<PWUP_Script>().PickedUpByPlayer(this.gameObject);
+
+       DeSpawnPowerUpServerRpc(netID);
+
+    }
+
+    [ServerRpc]
+    private void DeSpawnPowerUpServerRpc(ulong netID)
+    {
+        Debug.Log("GetPowerUp");
+        NetworkManager.SpawnManager.SpawnedObjects[netID].RemoveOwnership();
+        NetworkManager.SpawnManager.SpawnedObjects[netID].Despawn();
     }
 
 

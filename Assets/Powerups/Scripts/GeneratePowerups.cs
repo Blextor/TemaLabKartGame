@@ -59,6 +59,7 @@ public class GeneratePowerups : MonoBehaviour
     public void RemovePowerup(GameObject gameObject)
     {
         powerupPositions.Remove(gameObject);
+        //DeletePowerUpServerRpc(gameObject);
 
         List<Vector3> randomMapPoints = GetRandomPoints(powerupsOnMapCount + 1);
 
